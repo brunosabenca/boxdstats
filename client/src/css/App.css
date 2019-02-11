@@ -1,0 +1,75 @@
+.App {
+  font-family: 'HankenGroteskRegular'; 
+  font-weight: normal; 
+  font-style: normal; 
+}
+
+.App-header {
+  text-align: center;
+  display: block;
+  font-size: 1.5em;
+  color: #eff1f3;
+  background: #14181c;
+  font-weight: 900; 
+  padding: 0.8rem 0;
+}
+
+.App-logo {
+  height: 50px;
+}
+
+.App-body {
+  height: 100vh;
+  background: #14181c url(images/content-bg.png) 0 -1px repeat-x;
+  color: #eff1f3;
+  padding: 1rem;
+  justify-content: center;
+  text-align: left;
+}
+
+.App-body-wrapper {
+  width: 70vw;
+}
+
+.section {
+  display: block;
+  position: relative;
+  padding: 0 0 2.30769231rem;
+}
+
+.section-heading {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #9ab;
+    text-transform: uppercase;
+    letter-spacing: .075em;
+    margin-top: 0;
+    margin-bottom: .76923077rem;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #456;
+}
+
+.poster .image {
+    display: block;
+    border-radius: 4px;
+}
+
+.poster .frame {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    white-space: nowrap;
+    text-indent: 110%;
+    overflow: hidden;
+    -webkit-transition: -webkit-box-shadow .1s ease-in;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 0 1px rgba(221,238,255,.35);
+    background-image: -moz-linear-gradient(left center,hsla(0,0%,100%,0) 1%,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0) 100%);
+    background-repeat: no-repeat;
+    background-clip: padding-box;
+    background-size: 100% 1px;
+    border-radius: 4px;
+}
