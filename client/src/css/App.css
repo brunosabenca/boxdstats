@@ -20,7 +20,7 @@
 
 .App-body {
   height: 100vh;
-  background: #14181c url(images/content-bg.png) 0 -1px repeat-x;
+  background: #14181c url(../images/content-bg.png) 0 -1px repeat-x;
   color: #eff1f3;
   padding: 1rem;
   justify-content: center;
