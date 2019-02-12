@@ -5,11 +5,27 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import UsernameForm from './components/UsernameForm';
+import Avatar from './components/Avatar';
 
 import { ReactComponent as Logo } from './images/logo.svg';
 import './css/App.css';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      user : {
+        username: '',
+        id: ''
+      }
+    }
+  }
+
+  handleUser = (userValue) => {
+    this.setState({user: {username: userValue.username, id: userValue.id}});
+  }
+
   render() {
     return (
       <Container fluid={true} className="App">
@@ -37,7 +53,8 @@ class App extends Component {
               </Row>
 
               <Row>
-                <UsernameForm />
+                <Avatar size="60" alt="User" name="User" userId={this.state.user.id} />
+                <UsernameForm onUserChange={this.handleUser} />
               </Row>
 
             </Col>

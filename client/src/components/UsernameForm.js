@@ -19,16 +19,21 @@ class UsernameForm extends Component {
     handleFormSubmit(e) {
       e.preventDefault();
       let userData = this.state.user;
-      fetch('/users/' + userData.username)
+      fetch('/api/v1/username/' + userData.username + '/id')
         .then(res => res.json())
-        .then(value => 
+        .then(value => {
           this.setState({
             user: {
               username: value['username'],
               id: value['id']
             }
           })
-        );
+          this.props.onUserChange(value)
+        });
+    }
+
+    handleUserChange() {
+
     }
 
     handleClearForm(e) {
@@ -57,9 +62,6 @@ class UsernameForm extends Component {
     render() {
       return (
         <form onSubmit={this.handleFormSubmit}>
-
-          <h1>{this.state.user.id}</h1>
-
           <Input type={'text'}
             title='Username'
             name='username'
