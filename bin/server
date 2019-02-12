@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('boxdstats-backend:server');
+var debug = require('debug')('boxdstats:server');
 var http = require('http');
 
 /**

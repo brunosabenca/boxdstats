@@ -8,14 +8,21 @@
     "client": "node ./bin/client"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cookie-parser": "~1.4.3",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "morgan": "~1.9.0",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "require-directory": "^2.1.1",
+    "url-search-params-polyfill": "^5.0.0",
+    "uuid": "^3.3.2",
+    "uuid-random": "^1.0.6"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
+    "dotenv": "^6.2.0",
     "nodemon": "^1.18.10"
   }
 }
