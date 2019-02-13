@@ -17,13 +17,27 @@ class App extends Component {
     this.state = {
       user : {
         username: '',
-        id: ''
+        id: '',
+        avatar: '',
       }
     }
   }
 
-  handleUser = (userValue) => {
-    this.setState({user: {username: userValue.username, id: userValue.id}});
+  handleUserData = (userData) => {
+      this.setState(prevState => ({user: {...this.state.user, username: userData.username, id: userData.id}}));
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.state.user.id !== prevState.user.id) {
+      //Fetch avatar image URI
+      try {
+        const response = await fetch(`/api/v1/user/${this.state.user.id}/avatar`);
+        const imageUri = await response.json();
+        this.setState(prevState => ({user: {...prevState.user, avatar: imageUri}}));
+      } catch(e) {
+        console.log(e);
+      }
+    }
   }
 
   render() {
@@ -54,13 +68,13 @@ class App extends Component {
 
               <Row className="center">
                 <Col xs={9} md={6} lg={4}>
-                  <Avatar size="60" alt="User" name="User" userId={this.state.user.id} />
+                  <Avatar size="60" alt="User" name="User" imageUri={this.state.user.avatar} userId={this.state.user.id} />
                 </Col>
               </Row>
 
               <Row className="center">
                 <Col xs={9} md={6} lg={4}>
-                  <UsernameForm onUserChange={this.handleUser} />
+                  <UsernameForm onUserIdRetrieval={this.handleUserData} />
                 </Col>
               </Row>
 

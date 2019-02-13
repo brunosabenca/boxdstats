@@ -5,66 +5,44 @@ class UsernameForm extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        user : {
-          username: '',
-          id: ''
-        }
+        userName: ''
       }
   
       this.handleFormSubmit = this.handleFormSubmit.bind(this);
+
       this.handleInput = this.handleInput.bind(this);
+
       this.handleClearForm = this.handleClearForm.bind(this);
     }
   
     handleFormSubmit(e) {
       e.preventDefault();
-      let userData = this.state.user;
-      fetch('/api/v1/username/' + userData.username + '/id')
+      fetch('/api/v1/username/' + this.state.userName + '/id')
         .then(res => res.json())
-        .then(value => {
-          this.setState({
-            user: {
-              username: value['username'],
-              id: value['id']
-            }
-          })
-          this.props.onUserChange(value)
+        .then(data => {
+          this.props.onUserIdRetrieval(data)
         });
-    }
-
-    handleUserChange() {
-
     }
 
     handleClearForm(e) {
       e.preventDefault();
       this.setState({ 
-        user: {
-          username: '',
-          id: ''
-        }
+        userName: '',
       });
     }
 
     handleInput(e) {
       let value = e.target.value;
       let name = e.target.name;
-      this.setState( prevState => {
-        return { 
-          user : {
-            ...prevState.user, [name]: value
-          }
-        }
-      }, () => console.log(this.state.user)
-      )
+      this.setState({[name]: value});
     }
-  
+
     render() {
       return (
         <form onSubmit={this.handleFormSubmit}>
           <Input type={'text'}
-            name='username'
-            value={this.state.user.username} 
+            name='userName'
+            value={this.state.userName} 
             placeholder='Enter your username'
             handleChange={this.handleInput}
           /> {/* Username of the user */}
