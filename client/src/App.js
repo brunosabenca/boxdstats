@@ -52,9 +52,16 @@ class App extends Component {
                 </Col>
               </Row>
 
-              <Row>
-                <Avatar size="60" alt="User" name="User" userId={this.state.user.id} />
-                <UsernameForm onUserChange={this.handleUser} />
+              <Row className="center">
+                <Col xs={9} md={6} lg={4}>
+                  <Avatar size="60" alt="User" name="User" userId={this.state.user.id} />
+                </Col>
+              </Row>
+
+              <Row className="center">
+                <Col xs={9} md={6} lg={4}>
+                  <UsernameForm onUserChange={this.handleUser} />
+                </Col>
               </Row>
 
             </Col>

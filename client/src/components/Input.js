@@ -5,7 +5,7 @@ const Input = (props) => {
   <div className="form-group">
     <label htmlFor={props.name} className="form-label">{props.title}</label>
     <input
-      className="form-input"
+      className="field"
       id={props.name}
       name={props.name}
       type={props.type}

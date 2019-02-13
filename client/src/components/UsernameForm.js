@@ -63,13 +63,11 @@ class UsernameForm extends Component {
       return (
         <form onSubmit={this.handleFormSubmit}>
           <Input type={'text'}
-            title='Username'
             name='username'
             value={this.state.user.username} 
-            placeholder = 'Your username'
-            handleChange = {this.handleInput}
+            placeholder='Enter your username'
+            handleChange={this.handleInput}
           /> {/* Username of the user */}
-
         </form>
 
       );

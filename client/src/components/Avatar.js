@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import placeholderAvatar from '../images/avatar.png';
 
 class Avatar extends Component {
     constructor(props) {
@@ -37,15 +37,15 @@ class Avatar extends Component {
         return null;
     }
 
-    render() {
+    render() { 
         return(
-            this.state.imageUrl ? <div>
-                <img name={this.props.name} src={this.state.imageUrl} alt={this.props.alt}/>
-            </div> : <div>
-                {/* <img name={this.props.name} src={this.state.imageUrl} alt={this.props.alt}/> */}
-            </div>
+        <div className="profile-avatar">
+            <span className="avatar -a110 -large">
+                {this.state.imageUrl ? <img name={this.props.name} src={this.state.imageUrl} alt={this.props.alt}/> : <img name={this.props.name} src={placeholderAvatar} alt={this.props.alt}/>}
+            </span> 
+        </div>
         )
-    }
+  }
 }
 
 export default Avatar;
