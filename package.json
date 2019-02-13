@@ -3,9 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon --exec bin/server",
+    "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "server": "nodemon --no-stdin --exec bin/server",
     "client": "node ./bin/client"
+  },
+  "nodemonConfig": {
+    "delay": "3000",
+    "ignore": [
+      "client/"
+    ]
   },
   "dependencies": {
     "axios": "^0.18.0",
