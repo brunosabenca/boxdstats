@@ -1,38 +1,26 @@
-var client = require('../client');
-var fetch = require('node-fetch');
+const axios = require('axios');
+const client = require('../letterboxd');
 
-exports.id_get = function (req, res, next) {
+exports.id_get = async function (req, res, next) {
   let userName = req.params['userName'];
-
-  fetch(`http://letterboxd.com/${userName}/`,{
-    method: "GET",
-  }).then(res => {
-    return res.headers.get('x-letterboxd-identifier');
-  }).then(id => {
-    res.json({
-      'username': userName,
-      'id': id
-    });
-  }).catch(err => console.log(err));
-}
-
-const getAvatar = (userId) => {
-    return client.get(`/member/${userId}`)
-        .then((response) => {
-           return response.data.avatar.sizes[0].url;
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+  try {
+    let response = await axios(`http://letterboxd.com/${userName}`);
+    let userId = response.headers['x-letterboxd-identifier'];
+    res.json({'username': userName, 'id': userId});
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
 }
 
 exports.avatar_get = async function (req, res, next) {
   try {
     let userId = req.params['userId'];
-    const avatar =  await getAvatar(userId);
+    let response = await client.member(userId);
+    const avatar = response.data.avatar.sizes[0].url;
     res.json(avatar);
   } catch (e) {
     console.log(e);
-    next(e) 
+    next(e);
   }
 }
