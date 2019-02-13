@@ -12,6 +12,9 @@ module.exports = {
 
     watchlist(userId) {
         return client.get(`/member/${userId}/watchlist`);
-    }
+    },
 
+    activity(userId) {
+        return client.get(`/member/${userId}/activity`);
+    }
 }

@@ -17,7 +17,7 @@ class UsernameForm extends Component {
   
     handleFormSubmit(e) {
       e.preventDefault();
-      fetch('/api/v1/username/' + this.state.userName + '/id')
+      fetch('/api/v1/user/by-username/' + this.state.userName + '/id')
         .then(res => res.json())
         .then(data => {
           this.props.onUserIdRetrieval(data)

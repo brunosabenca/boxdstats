@@ -5,7 +5,7 @@ class Avatar extends Component {
     render() { 
         return(
         <div className="profile-avatar">
-            <span className="avatar -a110 -large">
+            <span className="avatar -a144 -large">
                 {this.props.imageUri ? <img name={this.props.name} src={this.props.imageUri} alt={this.props.alt}/> : <img name={this.props.name} src={placeholderAvatar} alt={this.props.alt}/>}
             </span> 
         </div>
@@ -14,6 +14,3 @@ class Avatar extends Component {
 }
 
 export default Avatar;
-
-
-
