@@ -1,4 +1,4 @@
-const client = new (require('./client'))();
+const client = new(require('./client'))();
 
 module.exports = {
 

@@ -1,6 +1,14 @@
-var axios = require('axios');
-var crypto = require('crypto')
-var uuid = require('uuid-random')
+const axios = require('axios');
+const redis = require('redis');
+const crypto = require('crypto')
+const uuid = require('uuid-random')
+const {
+  promisify
+} = require('util');
+const {
+  parse,
+  stringify
+} = require('flatted/cjs');
 
 require('dotenv').config();
 require('url-search-params-polyfill')
@@ -53,15 +61,46 @@ const getClient = () => {
   return client;
 };
 
+const getCache = () => {
+  // create and connect redis client to local instance.
+  const cache = redis.createClient();
+
+  // print redis errors to the console
+  cache.on('error', (err) => {
+    console.log("Error " + err);
+  });
+
+  return cache;
+}
+
 class ApiClient {
   constructor() {
     this.client = getClient();
+    this.cache = getCache();
+    this.getAsyncCache = promisify(this.cache.get).bind(this.cache);
   }
 
   get(url, conf = {}) {
+    // trim trailing spaces
+    const query = url.trim();
+
+    return this.getAsyncCache(`boxdstats:${query}`).then((result) => {
+      if (result) {
+        const resultJSON = parse(result);
+        console.log(resultJSON);
+        return Promise.resolve(resultJSON);
+      } else {
     return this.client.get(url, conf)
-      .then(response => Promise.resolve(response))
+          .then(response => {
+            this.cache.setex(`boxdstats:${query}`, 3600, stringify({
+              source: 'Redis Cache',
+              ...response.data,
+            }));
+            return Promise.resolve(response.data);
+          })
       .catch(error => Promise.reject(error));
+  }
+    })
   }
 
   delete(url, conf = {}) {

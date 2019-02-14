@@ -15,7 +15,9 @@ exports.id_by_username_get = async function (req, res, next) {
   let userName = req.params['userName'];
   try {
     let userId = await fetchId(userName);
-    res.json({'id': userId});
+    res.json({
+      'id': userId
+    });
   } catch (e) {
     console.log(e);
   }
@@ -32,7 +34,7 @@ exports.user_by_username_get = async function (req, res, next) {
   }
 }
 
-async function fetchId (userName) {
+async function fetchId(userName) {
   try {
     let response = await axios(`http://letterboxd.com/${userName}`);
     let userId = response.headers['x-letterboxd-identifier'];
@@ -48,19 +50,19 @@ async function fetchUserData(userId) {
     let stats = await client.statistics(userId);
 
     const user = {
-      'id': member.data.id,
-      'username': member.data.username,
-      'name': member.data.givenName,
-      'avatar': member.data.avatar.sizes[0].url,
-      'bio': member.data.bio,
-      'location': member.data.location,
-      'filmsInDiaryThisYear': stats.data.counts.filmsInDiaryThisYear,
-      'filmLikes': stats.data.counts.filmLikes,
-      'ratings': stats.data.counts.ratings,
-      'watches': stats.data.counts.watches,
-      'watchlist': stats.data.counts.watchlist,
-      'followers': stats.data.counts.followers,
-      'following': stats.data.counts.following,
+      'id': member.id,
+      'username': member.username,
+      'name': member.givenName,
+      'avatar': member.avatar.sizes[0].url,
+      'bio': member.bio,
+      'location': member.location,
+      'filmsInDiaryThisYear': stats.counts.filmsInDiaryThisYear,
+      'filmLikes': stats.counts.filmLikes,
+      'ratings': stats.counts.ratings,
+      'watches': stats.counts.watches,
+      'watchlist': stats.counts.watchlist,
+      'followers': stats.counts.followers,
+      'following': stats.counts.following,
     }
 
     return user;
