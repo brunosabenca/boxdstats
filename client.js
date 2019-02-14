@@ -30,17 +30,23 @@ const getClient = () => {
   client.interceptors.request.use((config) => {
     const now = new Date()
     const seconds = Math.round(now.getTime() / 1000)
-    const params = new URLSearchParams()
+
+    const params = new URLSearchParams();
 
     params.append('apikey', options.key)
     params.append('nonce', uuid())
     params.append('timestamp', seconds)
+
+    for(let key in config.params){
+        params.append(key, config.params[key]) 
+    }
 
     config.params = params;
 
     const finalUrl = `${options.baseURL}${config.url}?${config.params.toString()}`
 
     let saltedString = `${config.method.toUpperCase()}\u0000${finalUrl}\u0000`;
+    console.log(saltedString);
 
     if (config.data) {
       saltedString += config.data
@@ -81,13 +87,18 @@ class ApiClient {
   }
 
   get(url, conf = {}) {
+
+    const params = new URLSearchParams();
+    for(let key in conf.params){
+        params.append(key, conf.params[key]) 
+    }
     // trim trailing spaces
-    const query = url.trim();
+    const query = url.trim() + params.toString();
 
     return this.getAsyncCache(`boxdstats:${query}`).then((result) => {
       if (result) {
+        console.log('REDIS ' + query);
         const resultJSON = parse(result);
-        console.log(resultJSON);
         return Promise.resolve(resultJSON);
       } else {
     return this.client.get(url, conf)
