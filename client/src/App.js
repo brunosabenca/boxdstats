@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import UsernameForm from './components/UsernameForm';
 import Avatar from './components/Avatar';
+import MonthlyChart from './components/MonthlyChart';
 
 import { ReactComponent as Logo } from './images/logo.svg';
 import './css/App.css';
@@ -98,6 +99,9 @@ class App extends Component {
                       <h6>Likes: {this.state.user.filmLikes}</h6>
                       <h6>Ratings: {this.state.user.ratings}</h6>
                     </Col>
+                  <Col>
+                    <MonthlyChart userId={this.state.user.id}/>
+                  </Col>
                   </Row>
                 </Container>
                 :
