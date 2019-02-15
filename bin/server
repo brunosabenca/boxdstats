@@ -88,3 +88,12 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+* https://github.com/remy/nodemon/issues/1473#issuecomment-458727883
+*/
+process.once('SIGUSR2', function () {
+  server.close(function () {
+    process.kill(process.pid, 'SIGUSR2')
+  })
+})
