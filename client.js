@@ -37,8 +37,8 @@ const getClient = () => {
     params.append('nonce', uuid())
     params.append('timestamp', seconds)
 
-    for(let key in config.params){
-        params.append(key, config.params[key]) 
+    for (let key in config.params) {
+      params.append(key, config.params[key])
     }
 
     config.params = params;
@@ -89,8 +89,8 @@ class ApiClient {
   get(url, conf = {}) {
 
     const params = new URLSearchParams();
-    for(let key in conf.params){
-        params.append(key, conf.params[key]) 
+    for (let key in conf.params) {
+      params.append(key, conf.params[key])
     }
     // trim trailing spaces
     const query = url.trim() + params.toString();
@@ -101,7 +101,7 @@ class ApiClient {
         const resultJSON = parse(result);
         return Promise.resolve(resultJSON);
       } else {
-    return this.client.get(url, conf)
+        return this.client.get(url, conf)
           .then(response => {
             this.cache.setex(`boxdstats:${query}`, 3600, stringify({
               source: 'Redis Cache',
@@ -109,8 +109,8 @@ class ApiClient {
             }));
             return Promise.resolve(response.data);
           })
-      .catch(error => Promise.reject(error));
-  }
+          .catch(error => Promise.reject(error));
+      }
     })
   }
 

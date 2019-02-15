@@ -41,15 +41,46 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
 
   let logEntries = [];
   let monthlyLogEntryCount = {};
-
   const now = new Date();
 
+  // If current year then end at current month,
+  // else end at the 12th month
+  let end = now.getYear() !== year ? 12 : now.getMonth();
+
   try {
-    for (month = 1; month <= now.getMonth() + 1; month++) {
-      logEntries = await fetchLogEntries(userId, year, month);
+    for (month = 1; month <= end; month++) {
+      logEntries = await fetchLogEntries({
+        member: userId,
+        year: year,
+        month: month
+      });
       monthlyLogEntryCount[month] = logEntries.length;
     }
     res.json(monthlyLogEntryCount);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
+exports.log_entries_highest_rated_get = async function (req, res, next) {
+  let userId = req.params['userId'];
+  let year = req.params['year'];
+
+  const params = {
+    member: userId,
+    year: year,
+    sort: 'MemberRatingHighToLow',
+    minRating: 0.5,
+    maxRating: 5,
+    perPage: 5
+  };
+  const options = {
+    fetchSinglePage: true,
+  };
+  try {
+    let logEntries = await fetchLogEntries(params, options);
+    res.json(logEntries);
   } catch (e) {
     console.log(e);
   }
@@ -61,25 +92,48 @@ exports.log_entries_get = async function (req, res, next) {
   let month = req.params['month'];
   let day = req.params['day'];
 
-  const logEntries = [];
+  const params = {
+    member: userId,
+    perPage: 100
+  };
+
+  if (year != null) {
+    params['year'] = year;
+  }
+
+  if (month != null) {
+    params['month'] = month;
+  }
+
+  if (day != null) {
+    params['day'] = day;
+  }
+
   try {
-    let logEntries = await fetchLogEntries(userId, year, month, day);
+    let logEntries = await fetchLogEntries(params);
     res.json(logEntries);
   } catch (e) {
     console.log(e);
   }
 }
 
-async function fetchLogEntries(userId, year, month, day) {
-  const logEntries = [];
+async function fetchLogEntries(params, options) {
   try {
-    let response = await client.logEntries(userId, year, month, day);
+    let response = await client.logEntries(params);
     let logEntries = response.items.map(item => item);
 
-    while (response.next) {
-      response = await client.logEntries(userId, year, month, day, response.next);
-      let moreLogEntries = response.items.map(item => item);
-      logEntries = [...logEntries, ...moreLogEntries];
+    let fetchSinglePage = false;
+    if (arguments.length === 2  && options.hasOwnProperty('fetchSinglePage')) {
+      fetchSinglePage = options['fetchSinglePage'];
+    }
+
+    if (fetchSinglePage == false) {
+      while (response.next) {
+        params['cursor'] = response.next;
+        response = await client.logEntries(params);
+        let moreLogEntries = response.items.map(item => item);
+        logEntries = [...logEntries, ...moreLogEntries];
+      }
     }
 
     return logEntries;
