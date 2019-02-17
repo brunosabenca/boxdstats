@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { VictoryChart, VictoryTheme, VictoryBar } from "victory";
+import { VictoryTheme, VictoryBar } from "victory";
+import { BarLoader } from 'react-spinners';
 
 class MonthlyChart extends Component {
     constructor(props) {
@@ -7,7 +8,7 @@ class MonthlyChart extends Component {
         this.state = {
             data: [],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            isFetching: false,
+            isFetching: true,
         }
     }
 
@@ -24,28 +25,34 @@ class MonthlyChart extends Component {
     async fetchData() {
       try {
         this.setState({isFetching: true});
-        const response = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2018/monthly-counts`);
+        const response = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2019/monthly-counts`);
         const data = await response.json();
-        console.log(data);
         const arr = Object.keys(data).map((key, index) => ({"x": parseInt(key), "y": data[key], "label": this.state.months[index]}));
         this.setState({data: arr, isFetching: false});
-        console.log(this.state);
       } catch(e) {
         this.setState({isFetching: false});
-        console.log(e);
       }
     }
 
 
     render() {
         return (
-            this.state.isFetching ===  false ? <VictoryBar
+
+            this.state.isFetching ===  false ?
+            <VictoryBar
                 theme={VictoryTheme.material}
                 alignment="start"
                 data={this.state.data}
                 height={200}
             /> 
-            : 'Fetching...'
+            :
+            <BarLoader
+            widthUnit="%"
+            width={100}
+            color={'#24303c'}
+            loading={this.state.isFetching}
+            className="loading"
+            />
         )
     }
 }

@@ -17,11 +17,18 @@ class UsernameForm extends Component {
   
     handleFormSubmit(e) {
       e.preventDefault();
-      fetch('/api/v1/user/by-username/' + this.state.userName + '/id')
-        .then(res => res.json())
-        .then(data => {
-          this.props.onUserIdRetrieval(data)
-        });
+
+      let newUserName = String(this.state.userName).toLowerCase()
+      let prevUserName = String(this.props.userName).toLowerCase();
+
+      if (newUserName !== prevUserName) {
+        this.props.onUserInvalidated();
+        fetch('/api/v1/user/by-username/' + newUserName + '/id')
+          .then(res => res.json())
+          .then(data => {
+            this.props.onUserIdRetrieval(data)
+          });
+      }
     }
 
     handleClearForm(e) {
@@ -39,7 +46,7 @@ class UsernameForm extends Component {
 
     render() {
       return (
-        <form onSubmit={this.handleFormSubmit}>
+        <form id="username-form" onSubmit={this.handleFormSubmit}>
           <Input type={'text'}
             name='userName'
             value={this.state.userName} 

@@ -4,9 +4,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import { BarLoader } from 'react-spinners';
 import UsernameForm from './components/UsernameForm';
 import Avatar from './components/Avatar';
 import MonthlyChart from './components/MonthlyChart';
+import TopFilms from './components/TopFilms';
 
 import { ReactComponent as Logo } from './images/logo.svg';
 import './css/App.css';
@@ -30,12 +32,16 @@ class App extends Component {
         followers: null,
         following: null,
       },
-      retrievedUser: false
+      retrievedUser: false,
+      loading: false
     }
   }
 
+  handleUserInvalidated = (userName) => {
+    this.setState({retrievedUser: false, loading: true});
+  }
   handleUserData = (userData) => {
-      this.setState(prevState => ({user: {...prevState.user, username: userData.username, id: userData.id}}));
+    this.setState(prevState => ({user: {...prevState.user, username: userData.username, id: userData.id}}));
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -43,10 +49,9 @@ class App extends Component {
       try {
         const response = await fetch(`/api/v1/user/${this.state.user.id}`);
         const data = await response.json();
-        console.log(data);
 
         this.setState(prevState => ({...prevState, user: data}));
-        this.setState({retrievedUser: true});
+        this.setState({retrievedUser: true, loading: false});
       } catch(e) {
         console.log(e);
       }
@@ -68,44 +73,89 @@ class App extends Component {
           </Col>
 
         </Row>
+        <Row>
+
+        <BarLoader
+          widthUnit="%"
+          width={100}
+          color={'#24303c'}
+          loading={this.state.loading}
+          className="loading"
+        />
+        </Row>
 
         <Row className="App-body">
           <Row className="App-body-wrapper">
             <Col xs={12}>
               <Row className="center">
                 <Col xs={9} md={6} lg={4}>
-                  <UsernameForm onUserIdRetrieval={this.handleUserData} />
+                  <UsernameForm onUserInvalidated={this.handleUserInvalidated} onUserIdRetrieval={this.handleUserData} userName={this.state.user.username}/>
                 </Col>
               </Row>
               {
                 this.state.retrievedUser
                 ? 
                 <Container>
+                  <section className="section" id="profile-header">
+                    <div className="profile-summary">
+                      <div className="profile-avatar">
+                        <Avatar size="110" alt="User" name="User" imageUri={this.state.user.avatar} userId={this.state.user.id} />
+                      </div>
+                      <div className="profile-person-info">
+                        <h1 className="title-1">{this.state.user.name ? this.state.user.name : this.state.user.username}</h1>
+                        <ul className="person-metadata">
+                          <li>{this.state.user.location ? this.state.user.location : ''}</li>
+                        </ul>
+                      </div>
+                      <ul className="stats">
+                        <li>
+                          <p className="stat">
+                            <strong>{this.state.user.watches}</strong>
+                            <span>Films</span>
+                          </p>
+                        </li>
+                        <li>
+                          <p className="stat">
+                            <strong>{this.state.user.filmsInDiaryThisYear}</strong>
+                            <span>This year</span>
+                          </p>
+                        </li>
+                        <li>
+                          <p className="stat">
+                            <strong>{this.state.user.filmLikes}</strong>
+                            <span>Likes</span>
+                          </p>
+                        </li>
+                        <li>
+                          <p className="stat">
+                            <strong>{this.state.user.ratings}</strong>
+                            <span>Ratings</span>
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </section>
+
                   <Row>
                     <Col xs={12} className="section">
-                      <h2 className="section-heading">User Statistics</h2>
+                      <h2 className="section-heading">Highest Rated Films</h2>
+                      <TopFilms userId={this.state.user.id} year={2019}/>
                     </Col>
                   </Row>
+
                   <Row>
-                    <Col xs={6} md={6} lg={2}>
-                      <Avatar size="144" alt="User" name="User" imageUri={this.state.user.avatar} userId={this.state.user.id} />
-                      <br/>
-                      <h2>{this.state.user.name ? this.state.user.name : this.state.user.username}</h2>
-                      {this.state.user.location ? <h6>{this.state.user.location}</h6> : ''}
+                    <Col xs={12} className="section">
+                      <h2 className="section-heading">Monthly Chart</h2>
+                      <MonthlyChart userId={this.state.user.id}/>
                     </Col>
-                    <Col xs={6} md={4} lg={2}>
-                      <h6>Films: {this.state.user.watches}</h6>
-                      <h6>This year: {this.state.user.filmsInDiaryThisYear}</h6>
-                      <h6>Likes: {this.state.user.filmLikes}</h6>
-                      <h6>Ratings: {this.state.user.ratings}</h6>
-                    </Col>
-                  <Col>
-                    <MonthlyChart userId={this.state.user.id}/>
-                  </Col>
                   </Row>
+
                 </Container>
                 :
-                <Row></Row>
+                <Row>
+                  <Col xs={3} className="loading">
+                  </Col>
+                </Row>
               }
 
             </Col>
