@@ -103,7 +103,7 @@ class ApiClient {
       } else {
         return this.client.get(url, conf)
           .then(response => {
-            this.cache.setex(`boxdstats:${query}`, 3600, stringify({
+            this.cache.setex(`boxdstats:${query}`, 604800, stringify({
               source: 'Redis Cache',
               ...response.data,
             }));
