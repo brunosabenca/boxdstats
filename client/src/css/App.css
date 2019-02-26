@@ -185,7 +185,7 @@ body {
 
 .profile-avatar {
   flex: 0 0 auto;
-  margin-right: 15px;
+  margin-right: 5px;
 }
 
 .profile-person-info {
@@ -236,7 +236,8 @@ a {
 .profile-summary .title-1 {
     margin: 0 .38461538rem 0 0;
     /* font-family: Graphik-Semibold-Web,sans-serif; */
-    font-weight: 600;
+    font-size: 1.5em;
+    font-weight: 900;
     line-height: 1;
     display: inline-block;
     vertical-align: middle;
@@ -255,15 +256,23 @@ a {
 }
 
 ul.person-metadata {
-    padding-inline-start: 3px;
+    padding-inline-start: 1px;
 }
 
+.profile-summary {
+  align-items: center;
+}
 .profile-summary .profile-person-info .person-metadata li {
     display: inline-block;
     vertical-align: middle;
-    font-size: 1rem;
+    font-size: 0.9rem;
     line-height: 1.23076923;
     margin: .30769231rem 0rem .30769231rem 0;
+    color: #9ab;
+}
+
+.profile-person-info {
+  align-items: center;
 }
 
 .poster-viewingdata {
