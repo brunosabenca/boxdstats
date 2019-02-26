@@ -1,5 +1,5 @@
-import React, { Component, View } from "react";
-import { VictoryTheme, VictoryLabel,VictoryBar, VictoryAxis, VictoryChart, VictoryLegend, VictoryTooltip} from "victory";
+import React, { Component } from "react";
+import { VictoryTheme, VictoryBar, VictoryAxis, VictoryChart, VictoryLegend, VictoryTooltip} from "victory";
 import { BarLoader } from 'react-spinners';
 
 class MonthlyChart extends Component {
