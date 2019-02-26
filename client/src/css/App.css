@@ -254,10 +254,25 @@ a {
   display: block;
 }
 
+ul.person-metadata {
+    padding-inline-start: 3px;
+}
+
 .profile-summary .profile-person-info .person-metadata li {
     display: inline-block;
     vertical-align: middle;
     font-size: 1rem;
     line-height: 1.23076923;
     margin: .30769231rem 0rem .30769231rem 0;
+}
+
+.poster-viewingdata {
+    font-size: .92307692rem;
+    text-align: center;
+    padding-top: 3px;
+    clear: both;
+    color: #567;
+    overflow: hidden;
+    margin-bottom: 0;
+    line-height: 16px;
 }
