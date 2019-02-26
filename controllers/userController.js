@@ -37,23 +37,24 @@ exports.user_by_username_get = async function (req, res, next) {
 exports.log_entries_monthly_counts_get = async function (req, res, next) {
   let userId = req.params['userId'];
   let year = req.params['year'];
-  let month = req.params['month'];
 
   let logEntries = [];
   let monthlyLogEntryCount = {};
 
   const now = new Date();
   let currentYear = now.getFullYear();
-  let end = currentYear == year ? now.getMonth() : 11;
+  let end = currentYear == year ? now.getMonth()+1 : 12;
 
   try {
-    for (month = 1; month <= end + 1; month++) {
+    for (month = 1; month <= end; month++) {
       logEntries = await fetchLogEntries({
         member: userId,
         year: year,
         month: month
       });
-      monthlyLogEntryCount[month] = logEntries.length;
+      if (logEntries.length > 0) {
+        monthlyLogEntryCount[month] = logEntries.length;
+      }
     }
     res.json(monthlyLogEntryCount);
   } catch (e) {
