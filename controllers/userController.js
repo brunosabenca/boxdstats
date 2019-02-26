@@ -41,14 +41,13 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
 
   let logEntries = [];
   let monthlyLogEntryCount = {};
-  const now = new Date();
 
-  // If current year then end at current month,
-  // else end at the 12th month
-  let end = now.getYear() !== year ? 12 : now.getMonth();
+  const now = new Date();
+  let currentYear = now.getFullYear();
+  let end = currentYear == year ? now.getMonth() : 11;
 
   try {
-    for (month = 1; month <= end; month++) {
+    for (month = 1; month <= end + 1; month++) {
       logEntries = await fetchLogEntries({
         member: userId,
         year: year,
