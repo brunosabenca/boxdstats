@@ -268,7 +268,7 @@ ul.person-metadata {
 
 .poster-viewingdata {
     font-size: .92307692rem;
-    text-align: center;
+    /* text-align: center; */
     padding-top: 3px;
     clear: both;
     color: #567;
