@@ -82,7 +82,7 @@ class MonthlyChart extends Component {
                 width={350}
                 horizontal={false}
             >
-                <VictoryLegend x={350} y={0}
+                <VictoryLegend x={290} y={0}
                     width={100}
                     orientation="horizontal"
                     style={{
@@ -91,7 +91,7 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#89a',
-                            fontSize: 8 
+                            fontSize: 6 
                         },
                     }}
 
