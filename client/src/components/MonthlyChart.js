@@ -1,5 +1,5 @@
 import React, { Component, View } from "react";
-import { VictoryTheme, VictoryLabel,VictoryBar, VictoryAxis, VictoryChart, VictoryLegend } from "victory";
+import { VictoryTheme, VictoryLabel,VictoryBar, VictoryAxis, VictoryChart, VictoryLegend, VictoryTooltip} from "victory";
 import { BarLoader } from 'react-spinners';
 
 class MonthlyChart extends Component {
@@ -58,24 +58,20 @@ class MonthlyChart extends Component {
                 strokeDasharray: '6, 6',
             },
             tickLabels: {
-                fontSize: '10px',
+                fontSize: 8,
                 fontFamily: 'inherit',
                 fill: "#89a",
                 fillOpacity: 1,
                 margin: 0,
                 padding: 0,
             },
-            axisLabel: {
-                fontsize: '10px', 
-            }
         };
         return (
             this.state.isFetching ===  false ?
             <VictoryChart
                 theme={VictoryTheme.grayscale}
                 height={100}
-                domain={{ x: [1, 12] }}
-                domainPadding={{x: [15, 15], y: 20}}
+                domainPadding={{x: [2, 2], y: 0}}
                 padding={15}
                 horizontal={false}
             >
@@ -110,12 +106,28 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#89a',
-                            fontSize: '10px',
+                            fontSize: 7,
                         }
                     }}
                     alignment="start"
                     barWidth={12}
-                    labelComponent={<VictoryLabel dx={7}/>}
+                    labelComponent={<VictoryTooltip 
+                        cornerRadius={1}
+                        pointerLength={3}
+                        width={15}
+                        dx={6}
+                        dy={-8}
+                        style={{
+                            fill: '#2c3440',
+                            padding: 2,
+                            fontSize: 7,
+                        }}
+                        flyoutStyle={{
+                            stroke: "none",
+                            fill: "#89a"
+                        }}
+                        />
+                    }
                 /> 
                 <VictoryBar
                     data={this.state.prevData}
@@ -130,12 +142,28 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#2c3440',
-                            fontSize: '8px',
+                            fontSize: '9px',
                         }
                     }}
                     alignment="end"
                     barWidth={8}
-                    labelComponent={<VictoryLabel dx={-6}/>}
+                    labelComponent={<VictoryTooltip 
+                        cornerRadius={1}
+                        pointerLength={3}
+                        width={15}
+                        dx={-4}
+                        dy={-8}
+                        style={{
+                            fill: '#89a',
+                            padding: 2,
+                            fontSize: 7,
+                        }}
+                        flyoutStyle={{
+                            stroke: "none",
+                            fill: "#2c3440"
+                        }}
+                        />
+                    }
                 /> 
                 <VictoryAxis
                     tickFormat={ (t, i) => { return this.state.months[i]} }   
