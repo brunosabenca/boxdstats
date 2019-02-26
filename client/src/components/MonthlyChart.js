@@ -8,6 +8,7 @@ class MonthlyChart extends Component {
         this.state = {
             data: [],
             prevData: [],
+            max: 0,
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             isFetching: true,
         }
@@ -26,21 +27,24 @@ class MonthlyChart extends Component {
     async fetchData() {
       try {
         this.setState({isFetching: true});
+
         const response = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2019/monthly-counts`);
         const data = await response.json();
         const arr = Object.keys(data).map((key, index) => ({"x": this.state.months[index], "y": data[key], "label": data[key]}));
         this.setState({data: arr});
+
         const prevresponse = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2018/monthly-counts`);
         const prevdata = await prevresponse.json();
         const prevarr = Object.keys(prevdata).map((key, index) => ({"x": this.state.months[index], "y": prevdata[key], "label": prevdata[key]}));
-        this.setState({prevData: prevarr, isFetching: false});
+
+        // Calculate max value of both arrays
+        const max = Math.max.apply(Math, arr.concat(prevarr).map(function(o) { return o.y; }))
+
+        this.setState({prevData: prevarr, max: max, isFetching: false});
       } catch(e) {
         this.setState({isFetching: false});
       }
     }
-
-
-
 
     render() {
         const tickStyle = {
@@ -58,21 +62,24 @@ class MonthlyChart extends Component {
                 strokeDasharray: '6, 6',
             },
             tickLabels: {
-                fontSize: 8,
+                fontSize: 6,
                 fontFamily: 'inherit',
+                textTransform: 'uppercase',
                 fill: "#89a",
                 fillOpacity: 1,
                 margin: 0,
-                padding: 0,
+                padding: 2,
             },
         };
         return (
             this.state.isFetching ===  false ?
             <VictoryChart
                 theme={VictoryTheme.grayscale}
-                height={100}
+                domain={{x: [1, 12], y: [0, this.state.max]}}
                 domainPadding={{x: [2, 2], y: 0}}
-                padding={15}
+                padding={10}
+                height={100}
+                width={350}
                 horizontal={false}
             >
                 <VictoryLegend x={350} y={0}
@@ -94,6 +101,9 @@ class MonthlyChart extends Component {
                     ]}
                 />
                 <VictoryBar
+
+                    height={100}
+                    width={350}
                     data={this.state.data}
                     animate={{
                         onExit: {
@@ -110,17 +120,18 @@ class MonthlyChart extends Component {
                         }
                     }}
                     alignment="start"
-                    barWidth={12}
+                    barWidth={8}
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
-                        width={15}
-                        dx={6}
+                        width={11}
+                        height={11}
+                        dx={4}
                         dy={-8}
                         style={{
                             fill: '#2c3440',
-                            padding: 2,
-                            fontSize: 7,
+                            padding: 1,
+                            fontSize: 6,
                         }}
                         flyoutStyle={{
                             stroke: "none",
@@ -150,13 +161,14 @@ class MonthlyChart extends Component {
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
-                        width={15}
+                        width={11}
+                        height={11}
                         dx={-4}
                         dy={-8}
                         style={{
                             fill: '#89a',
-                            padding: 2,
-                            fontSize: 7,
+                            padding: 1,
+                            fontSize: 6,
                         }}
                         flyoutStyle={{
                             stroke: "none",

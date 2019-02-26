@@ -43,7 +43,7 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
 
   const now = new Date();
   let currentYear = now.getFullYear();
-  let end = currentYear == year ? now.getMonth()+1 : 12;
+  let end = currentYear == year ? now.getMonth() + 1 : 12;
 
   try {
     for (month = 1; month <= end; month++) {
@@ -52,9 +52,7 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
         year: year,
         month: month
       });
-      if (logEntries.length > 0) {
-        monthlyLogEntryCount[month] = logEntries.length;
-      }
+      monthlyLogEntryCount[month] = logEntries.length;
     }
     res.json(monthlyLogEntryCount);
   } catch (e) {
