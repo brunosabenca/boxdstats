@@ -157,7 +157,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'hand', opacity: 0.8 })
+                                        style: Object.assign({}, props.style, { cursor: 'pointer', opacity: 0.8 })
                                         }
                                     }
                                     }, {
@@ -238,7 +238,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'hand', opacity: 0.8 })
+                                        style: Object.assign({}, props.style, { cursor: 'pointer', opacity: 0.8 })
                                         }
                                     }
                                     }, {
