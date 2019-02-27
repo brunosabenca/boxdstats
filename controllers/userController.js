@@ -84,7 +84,6 @@ exports.log_entries_highest_rated_get = async function (req, res, next) {
       .map((key, index) => ({
         "name": logEntries[key].film.name,
         "link": logEntries[key].film.links[0].url,
-        "rewatch": logEntries[key].diaryDetails.rewatch,
         "rating": logEntries[key].rating,
         "like": logEntries[key].like,
         "poster": logEntries[key].film.poster.sizes[3],

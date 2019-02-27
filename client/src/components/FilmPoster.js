@@ -34,9 +34,9 @@ const FilmPoster = (props) => {
                     <span className="overlay"></span>
                 </a>
             </div>
-            <p class="poster-viewingdata">
-                <span itemscope="" itemtype="http://schema.org/Rating" class={'rating rated-' + props.rating}> {getStarRating(Number.parseFloat(props.rating))}
-                    <meta itemprop="ratingValue" content={props.rating}/><meta itemprop="worstRating" content="1"/><meta itemprop="bestRating" content="10"/>
+            <p className="poster-viewingdata">
+                <span itemScope="" itemType="http://schema.org/Rating" className={'rating rated-' + props.rating}> {getStarRating(Number.parseFloat(props.rating))}
+                    <meta itemProp="ratingValue" content={props.rating}/><meta itemProp="worstRating" content="1"/><meta itemProp="bestRating" content="10"/>
                 </span>
             </p>
         </div>

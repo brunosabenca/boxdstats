@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import FilmPoster from './FilmPoster';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { BarLoader } from 'react-spinners';
 
-class MonthlyChart extends Component {
+class TopFilms extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,7 +10,6 @@ class MonthlyChart extends Component {
                 {
                     name: '',
                     link: '',
-                    rewatch: '',
                     rating: '',
                     like: '',
                     poster: {
@@ -57,6 +54,7 @@ class MonthlyChart extends Component {
                 rating={film.rating}
                 href={film.link}
                 className="poster"
+                key={film.link}
             />
         });
 
@@ -77,4 +75,4 @@ class MonthlyChart extends Component {
     }
 }
 
-export default MonthlyChart;
+export default TopFilms;
