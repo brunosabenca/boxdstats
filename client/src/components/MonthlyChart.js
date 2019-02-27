@@ -120,7 +120,7 @@ class MonthlyChart extends Component {
                         }
                     }}
                     alignment="start"
-                    barWidth={8}
+                    barWidth={10}
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
@@ -152,6 +152,34 @@ class MonthlyChart extends Component {
                                     }
                                     }];
                                 },
+                                onMouseOver: () => {
+                                return [
+                                    {
+                                    mutation: (props) => {
+                                        return {
+                                        style: Object.assign({}, props.style, { cursor: 'hand', opacity: 0.8 })
+                                        }
+                                    }
+                                    }, {
+                                    target: "labels",
+                                    mutation: () => ({active: true})
+                                    }
+                                ]
+                                },
+                                onMouseOut: () => {
+                                return [
+                                    {
+                                    mutation: (props) => {
+                                        return {
+                                        style: Object.assign({}, props.style, { cursor: 'auto', opacity: 1})
+                                        }
+                                    }
+                                    }, {
+                                    target: "labels",
+                                    mutation: () => ({active: false})
+                                    }
+                                ]
+                                }
                             }
                         }
                     ]}
@@ -173,7 +201,7 @@ class MonthlyChart extends Component {
                         }
                     }}
                     alignment="end"
-                    barWidth={8}
+                    barWidth={10}
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
@@ -205,6 +233,34 @@ class MonthlyChart extends Component {
                                     }
                                     }];
                                 },
+                                onMouseOver: () => {
+                                return [
+                                    {
+                                    mutation: (props) => {
+                                        return {
+                                        style: Object.assign({}, props.style, { cursor: 'hand', opacity: 0.8 })
+                                        }
+                                    }
+                                    }, {
+                                    target: "labels",
+                                    mutation: () => ({active: true})
+                                    }
+                                ]
+                                },
+                                onMouseOut: () => {
+                                return [
+                                    {
+                                    mutation: (props) => {
+                                        return {
+                                        style: Object.assign({}, props.style, { cursor: 'auto', opacity: 1})
+                                        }
+                                    }
+                                    }, {
+                                    target: "labels",
+                                    mutation: () => ({active: false})
+                                    }
+                                ]
+                                }
                             }
                         }
                     ]}
