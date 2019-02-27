@@ -47,19 +47,40 @@ body {
   width: 15vw;
 }
 
-.poster-list {
+.poster-container {
   display: block;
+  width: 162px;
 }
 
-.poster-container {
-  justify-content: center;
-  width: 100%;
+.poster-list {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+  -ms-flex-pack: space-around;
+  justify-content: space-around;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.poster {
+  margin-bottom: 0;
+  display: block;
+  width: 162px;
+  height: 243px;
+  background: #161718;
+  box-shadow: 0 1px 3px rgba(0,0,0,.35);
+  overflow: hidden;
+  position: relative;
 }
 
 .poster .image {
   width: 100%;
   display: block;
   border-radius: 4px;
+  margin: 0;
+  padding: 0;
 }
 
 .poster .frame {
@@ -81,6 +102,32 @@ body {
   background-clip: padding-box;
   background-size: 100% 1px;
   border-radius: 4px;
+}
+
+.poster .overlay {
+    display: block;
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    text-indent: 110%;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: border .1s linear;
+    border: 1px solid #00e054;
+    border-radius: 3px;
+}
+
+
+.poster .frame:hover .overlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid #00e054;
 }
 
 .attribution-block {

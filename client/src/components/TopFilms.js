@@ -48,47 +48,23 @@ class MonthlyChart extends Component {
     }
 
     render() {
-        function getStarRating(rating) {
-            var stars = '';
-
-            if (rating < 0 || rating > 5) {
-                return stars;
-            }
-
-            for (var i = 0; i < Math.floor(rating); i++) {
-                // stars += '⭐';
-                stars += '★';
-            }
-
-            if (rating % 1 !== 0) {
-                stars += '½';
-            }
-
-            return stars;
-        }
-
         var filmPosters = this.state.data.map(function(film, index){
-            return <Col xs={12} sm={6} md={4} xl={2} key={index}>
-                <FilmPoster
-                    name={film.name}
-                    src={film.poster.url}
-                    height={film.poster.height}
-                    width={film.poster.width}
-                    className="poster"
-                />
-                <p class="poster-viewingdata">
-                    <span itemscope="" itemtype="http://schema.org/Rating" class={'rating rated-' + film.rating}> {getStarRating(Number.parseFloat(film.rating))}
-                        <meta itemprop="ratingValue" content={film.rating}/><meta itemprop="worstRating" content="1"/><meta itemprop="bestRating" content="10"/>
-                    </span>
-                </p>
-            </Col>
+            return <FilmPoster
+                name={film.name}
+                src={film.poster.url}
+                height={film.poster.height}
+                width={film.poster.width}
+                rating={film.rating}
+                href={film.link}
+                className="poster"
+            />
         });
 
         return (
             this.state.isFetching === false ? 
-            <Row className="poster-container">
+            <div className="poster-list">
                 { filmPosters.length !== 0 ? filmPosters : <span>No film ratings found.</span>}
-            </Row>
+            </div>
             :
             <BarLoader
             widthUnit="%"
