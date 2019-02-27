@@ -147,7 +147,7 @@ class MonthlyChart extends Component {
                                     return [{
                                     target: "data",
                                     mutation: (props) => {
-                                        window.open("https://letterboxd.com/heikai/films/diary/for/2019/" + (props.index + 1), '_blank');
+                                        window.open("https://letterboxd.com/heikai/films/diary/for/2019/" + (props.index + 1) + "/", '_blank');
                                         console.log(props.index);
                                     }
                                     }];
@@ -228,7 +228,7 @@ class MonthlyChart extends Component {
                                     return [{
                                     target: "data",
                                     mutation: (props) => {
-                                        window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1), '_blank');
+                                        window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1) + "/", '_blank');
                                         console.log(props.index);
                                     }
                                     }];
