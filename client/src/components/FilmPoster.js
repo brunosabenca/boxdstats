@@ -30,7 +30,7 @@ const FilmPoster = (props) => {
                     src={props.src}
                     // style={{width: props.width, height: props.height}}
                 />
-                <a className="frame" href={props.href}>
+                <a className="frame" href={props.href} target="_blank" rel="noopener noreferrer">
                     <span className="overlay"></span>
                 </a>
             </div>
