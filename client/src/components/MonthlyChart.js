@@ -195,7 +195,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'pointer', opacity: 0.8 })
+                                            style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
                                         }
                                     }
                                     }, {
@@ -209,7 +209,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'auto', opacity: 1})
+                                            style: Object.assign({}, props.style, { cursor: 'auto', fill: '#89a' })
                                         }
                                     }
                                     }, {
@@ -276,7 +276,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'pointer', opacity: 0.8 })
+                                            style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
                                         }
                                     }
                                     }, {
@@ -290,7 +290,7 @@ class MonthlyChart extends Component {
                                     {
                                     mutation: (props) => {
                                         return {
-                                        style: Object.assign({}, props.style, { cursor: 'auto', opacity: 1})
+                                            style: Object.assign({}, props.style, { cursor: 'auto', fill: '#2c3440'})
                                         }
                                     }
                                     }, {
