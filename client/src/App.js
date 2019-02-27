@@ -12,6 +12,7 @@ import TopFilms from './components/TopFilms';
 
 import { ReactComponent as Logo } from './images/logo.svg';
 import './css/App.css';
+import {makeCancelable} from './makeCancelable'
 
 class App extends Component {
 
@@ -33,6 +34,7 @@ class App extends Component {
         following: null,
       },
       retrievedUser: false,
+      cancelable: [],
       loading: false
     }
   }
@@ -44,17 +46,38 @@ class App extends Component {
     this.setState(prevState => ({user: {...prevState.user, username: userData.username, id: userData.id}}));
   }
 
+  async componentWillUnmount() {
+      if (this.state.cancelable) {
+          this.state.cancelable.forEach((item) => item.cancel())
+      }
+  }
+
   async componentDidUpdate(prevProps, prevState) {
     if (this.state.user.id !== prevState.user.id) {
-      try {
-        const response = await fetch(`/api/v1/user/${this.state.user.id}`);
-        const data = await response.json();
+        if (this.state.cancelable) {
+            this.state.cancelable.forEach((item) => item.cancel())
+        }
+        this.setState({cancelable: []});
 
-        this.setState(prevState => ({...prevState, user: data}));
-        this.setState({retrievedUser: true, loading: false});
-      } catch(e) {
-        console.log(e);
-      }
+        const promise = fetch(`/api/v1/user/${this.state.user.id}`);
+        const cancelable = makeCancelable(promise);
+
+        this.setState(prevState => ({
+            cancelable: [...prevState.cancelable, cancelable]
+        }));
+
+        cancelable
+        .promise
+        .then((res) => {
+          return res.json();
+        }).then((data) => {
+          this.setState(prevState => ({...prevState, user: data}));
+          this.setState({retrievedUser: true, loading: false});
+        }).catch(({isCanceled, ...error}) => {
+            if (isCanceled) {
+                console.log('Fetching user data was cancelled.')
+            }
+        });
     }
   }
 

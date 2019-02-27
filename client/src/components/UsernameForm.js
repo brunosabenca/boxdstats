@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Input from '../components/Input';  
+import {makeCancelable} from '../makeCancelable'
 
 class UsernameForm extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        userName: ''
+        userName: '',
+        cancelable: []
       }
   
       this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -17,16 +19,35 @@ class UsernameForm extends Component {
   
     handleFormSubmit(e) {
       e.preventDefault();
+      window.scrollTo(0,0);
 
       let newUserName = String(this.state.userName).toLowerCase()
       let prevUserName = String(this.props.userName).toLowerCase();
 
       if (newUserName !== prevUserName) {
+        if (this.state.cancelable) {
+            this.state.cancelable.forEach((item) => item.cancel())
+        }
+        this.setState({cancelable: []});
+
         this.props.onUserInvalidated();
-        fetch('/api/v1/user/by-username/' + newUserName + '/id')
+
+        const promise = fetch('/api/v1/user/by-username/' + newUserName + '/id');
+        const cancelable = makeCancelable(promise);
+
+        this.setState(prevState => ({
+            cancelable: [...prevState.cancelable, cancelable]
+        }));
+
+        cancelable
+          .promise
           .then(res => res.json())
           .then(data => {
             this.props.onUserIdRetrieval(data)
+          }).catch(({isCanceled, ...error}) => {
+              if (isCanceled) {
+                  console.log('Fetching user id was cancelled.')
+              }
           });
       }
     }

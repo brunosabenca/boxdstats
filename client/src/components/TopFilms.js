@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import FilmPoster from './FilmPoster';
 import { BarLoader } from 'react-spinners';
+import {makeCancelable} from '../makeCancelable'
 
 class TopFilms extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ class TopFilms extends Component {
                     }
                 }
             ],
+            cancelable: [],
             isFetching: true,
         }
     }
@@ -29,19 +31,41 @@ class TopFilms extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (prevProps.userId !== this.props.userId) {
+            if (this.state.cancelable) {
+                this.state.cancelable.forEach((item) => item.cancel())
+            }
             this.fetchData();
         }
     }
 
+    componentWillUnmount() {
+        if (this.state.cancelable) {
+            this.state.cancelable.forEach((item) => item.cancel())
+        }
+    }
+
     async fetchData() {
-      try {
         this.setState({isFetching: true});
-        const response = await fetch(`/api/v1/user/${this.props.userId}/log-entries/top5/${this.props.year}`);
-        const data = await response.json();
-        this.setState({data: data, isFetching: false});
-      } catch(e) {
-        this.setState({isFetching: false});
-      }
+
+        const promise = fetch(`/api/v1/user/${this.props.userId}/log-entries/top5/${this.props.year}`);
+        const cancelable = makeCancelable(promise);
+
+        this.setState(prevState => ({
+            cancelable: [...prevState.cancelable, cancelable]
+        }));
+
+        cancelable
+        .promise
+        .then((res) => {
+            return res.json();
+        }).then((data) => {
+            this.setState({data: data, isFetching: false});
+        }).catch(({isCanceled, ...error}) => {
+            this.setState({isFetching: false});
+            if (isCanceled) {
+                console.log('Fetching top films was cancelled.')
+            }
+        });
     }
 
     render() {

@@ -29,6 +29,12 @@ class MonthlyChart extends Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this.state.cancelable) {
+            this.state.cancelable.forEach((item) => item.cancel())
+        }
+    }
+
     async fetchCounts(year) {
         const promise = fetch(`/api/v1/user/${this.props.userId}/log-entries/${year}/monthly-counts`);
         const cancelable = makeCancelable(promise);
@@ -44,26 +50,38 @@ class MonthlyChart extends Component {
         }).then((data) => {
             const array = Object.keys(data).map((key, index) => ({"x": this.state.months[index], "y": data[key], "label": data[key]}));
             return array;
-        }).catch(({isCanceled, ...error}) => console.log('isCanceled', isCanceled));
+        }).catch(({isCanceled, ...error}) => {
+            if (isCanceled) {
+                console.log('Fetching monthly counts was cancelled.')
+            }
+        });
     }
 
     async fetchData() {
-      try {
         this.setState({isFetching: true});
 
-        let counts = {}
+        const counts2018 = this.fetchCounts(2018);
+        const counts2019 = this.fetchCounts(2019);
 
-        counts['2019'] = await this.fetchCounts(2019);
-        counts['2018'] = await this.fetchCounts(2018);
-        this.setState({cancelable: []});
+        const promise =  Promise.all([counts2019, counts2018]);
+        const cancelable = makeCancelable(promise);
 
-        // Calculate max value of both arrays
-        const max = Math.max(...counts['2018'].concat(counts['2019']).map(function(o) { return o.y; }))
+        this.setState(prevState => ({
+            cancelable: [...prevState.cancelable, cancelable]
+        }));
 
-        this.setState({data: {'2018': counts['2018'], '2019': counts['2019']}, max: max, isFetching: false});
-      } catch(error) {
-        this.setState({isFetching: false});
-      }
+        cancelable
+        .promise
+        .then((data) => {
+            // Calculate max value of both arrays
+            const max = Math.max(...data[0].concat(data[1]).map(function(o) { return o.y; }))
+
+            this.setState({data: {'2018': data[0], '2019': data[1]}, max: max, isFetching: false, cancelable: []});
+        }).catch(({isCanceled, ...error}) => {
+            if (isCanceled) {
+                console.log('Fetching monthly chart data was cancelled.')
+            }
+        });
     }
 
     render() {
