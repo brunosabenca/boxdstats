@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { VictoryTheme, VictoryBar, VictoryAxis, VictoryChart, VictoryLegend, VictoryTooltip} from "victory";
 import { BarLoader } from 'react-spinners';
+import {makeCancelable} from '../makeCancelable'
 
 class MonthlyChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            prevData: [],
+            data: {},
             max: 0,
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             isFetching: true,
+            cancelable: []
         }
     }
 
@@ -20,28 +21,47 @@ class MonthlyChart extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (prevProps.userId !== this.props.userId) {
+            if (this.state.cancelable) {
+                this.state.cancelable.forEach((item) => item.cancel())
+            }
+            this.setState({cancelable: []});
             this.fetchData();
         }
+    }
+
+    async fetchCounts(year) {
+        const promise = fetch(`/api/v1/user/${this.props.userId}/log-entries/${year}/monthly-counts`);
+        const cancelable = makeCancelable(promise);
+
+        this.setState(prevState => ({
+            cancelable: [...prevState.cancelable, cancelable]
+        }));
+
+        return cancelable
+        .promise
+        .then((res) => {
+            return res.json();
+        }).then((data) => {
+            const array = Object.keys(data).map((key, index) => ({"x": this.state.months[index], "y": data[key], "label": data[key]}));
+            return array;
+        }).catch(({isCanceled, ...error}) => console.log('isCanceled', isCanceled));
     }
 
     async fetchData() {
       try {
         this.setState({isFetching: true});
 
-        const response = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2019/monthly-counts`);
-        const data = await response.json();
-        const arr = Object.keys(data).map((key, index) => ({"x": this.state.months[index], "y": data[key], "label": data[key]}));
-        this.setState({data: arr});
+        let counts = {}
 
-        const prevresponse = await fetch(`/api/v1/user/${this.props.userId}/log-entries/2018/monthly-counts`);
-        const prevdata = await prevresponse.json();
-        const prevarr = Object.keys(prevdata).map((key, index) => ({"x": this.state.months[index], "y": prevdata[key], "label": prevdata[key]}));
+        counts['2019'] = await this.fetchCounts(2019);
+        counts['2018'] = await this.fetchCounts(2018);
+        this.setState({cancelable: []});
 
         // Calculate max value of both arrays
-        const max = Math.max(...arr.concat(prevarr).map(function(o) { return o.y; }))
+        const max = Math.max(...counts['2018'].concat(counts['2019']).map(function(o) { return o.y; }))
 
-        this.setState({prevData: prevarr, max: max, isFetching: false});
-      } catch(e) {
+        this.setState({data: {'2018': counts['2018'], '2019': counts['2019']}, max: max, isFetching: false});
+      } catch(error) {
         this.setState({isFetching: false});
       }
     }
@@ -75,7 +95,7 @@ class MonthlyChart extends Component {
             this.state.isFetching ===  false ?
             <VictoryChart
                 theme={VictoryTheme.grayscale}
-                domain={{x: [1, 12], y: [0, this.state.max]}}
+                domain={{x: [1, 12], y: [0, this.state.max || 5]}}
                 domainPadding={{x: [2, 2], y: 0}}
                 padding={10}
                 height={100}
@@ -104,7 +124,7 @@ class MonthlyChart extends Component {
 
                     height={100}
                     width={350}
-                    data={this.state.data}
+                    data={this.state.data['2018']}
                     animate={{
                         onExit: {
                             duration: 500
@@ -185,7 +205,7 @@ class MonthlyChart extends Component {
                     ]}
                 /> 
                 <VictoryBar
-                    data={this.state.prevData}
+                    data={this.state.data['2019']}
                     animate={{
                         onExit: {
                             duration: 500
