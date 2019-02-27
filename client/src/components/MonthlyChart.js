@@ -38,7 +38,7 @@ class MonthlyChart extends Component {
         const prevarr = Object.keys(prevdata).map((key, index) => ({"x": this.state.months[index], "y": prevdata[key], "label": prevdata[key]}));
 
         // Calculate max value of both arrays
-        const max = Math.max.apply(Math, arr.concat(prevarr).map(function(o) { return o.y; }))
+        const max = Math.max(...arr.concat(prevarr).map(function(o) { return o.y; }))
 
         this.setState({prevData: prevarr, max: max, isFetching: false});
       } catch(e) {
@@ -116,7 +116,7 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#89a',
-                            fontSize: 7,
+                            fontSize: 6,
                         }
                     }}
                     alignment="start"
@@ -139,6 +139,22 @@ class MonthlyChart extends Component {
                         }}
                         />
                     }
+                    events={[
+                        {
+                            target: "data",
+                            eventHandlers: {
+                                onClick: () => {
+                                    return [{
+                                    target: "data",
+                                    mutation: (props) => {
+                                        window.open("https://letterboxd.com/heikai/films/diary/for/2019/" + (props.index + 1), '_blank');
+                                        console.log(props.index);
+                                    }
+                                    }];
+                                },
+                            }
+                        }
+                    ]}
                 /> 
                 <VictoryBar
                     data={this.state.prevData}
@@ -153,7 +169,7 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#2c3440',
-                            fontSize: '9px',
+                            fontSize: 6,
                         }
                     }}
                     alignment="end"
@@ -176,6 +192,22 @@ class MonthlyChart extends Component {
                         }}
                         />
                     }
+                    events={[
+                        {
+                            target: "data",
+                            eventHandlers: {
+                                onClick: () => {
+                                    return [{
+                                    target: "data",
+                                    mutation: (props) => {
+                                        window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1), '_blank');
+                                        console.log(props.index);
+                                    }
+                                    }];
+                                },
+                            }
+                        }
+                    ]}
                 /> 
                 <VictoryAxis
                     tickFormat={ (t, i) => { return this.state.months[i]} }   
