@@ -41,15 +41,26 @@ class App extends Component {
   }
 
   handleUserInvalidated = (userName) => {
-    this.setState({retrievedUser: false, loading: true});
+    this.setState({
+      failedUserIdRetrieval: false,
+      retrievedUser: false,
+      loading: true
+    });
   }
 
   handleUserData = (userData) => {
-    this.setState(prevState => ({user: {...prevState.user, username: userData.username, id: userData.id}}));
+    this.setState(prevState => ({
+      user: {...prevState.user, username: userData.username, id: userData.id},
+      failedUserIdRetrieval: false,
+    }));
   }
 
   handleUserIdRetrievalFailure = () => {
-    this.setState(prevState => ({failedUserIdRetrieval: true, loading: false}));
+    this.setState(prevState => ({
+      user: {},
+      failedUserIdRetrieval: true,
+      loading: false
+    }));
   }
 
   async componentWillUnmount() {
@@ -120,8 +131,7 @@ class App extends Component {
                   <UsernameForm 
                     onUserInvalidated={this.handleUserInvalidated}
                     onUserIdRetrieval={this.handleUserData}
-                    onUserIdFailedRetrieval={this.handleUserIdRetrievalFailure}
-                    userName={this.state.user.username}/>
+                    onUserIdFailedRetrieval={this.handleUserIdRetrievalFailure}/>
                 </Col>
               </Row>
               {

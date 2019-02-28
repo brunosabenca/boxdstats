@@ -7,6 +7,7 @@ class UsernameForm extends Component {
       super(props);
       this.state = {
         userName: '',
+        submittedUserName: '',
         cancelable: []
       }
   
@@ -21,10 +22,9 @@ class UsernameForm extends Component {
       e.preventDefault();
       window.scrollTo(0,0);
 
-      let newUserName = String(this.state.userName).toLowerCase()
-      let prevUserName = String(this.props.userName).toLowerCase();
+      if (this.state.userName !== this.state.submittedUserName) {
+        this.setState({submittedUserName: this.state.userName});
 
-      if (newUserName !== prevUserName) {
         if (this.state.cancelable) {
             this.state.cancelable.forEach((item) => item.cancel())
         }
@@ -32,7 +32,7 @@ class UsernameForm extends Component {
 
         this.props.onUserInvalidated();
 
-        const promise = fetch('/api/v1/user/by-username/' + newUserName + '/id');
+        const promise = fetch('/api/v1/user/by-username/' + this.state.userName  + '/id');
         const cancelable = makeCancelable(promise);
 
         this.setState(prevState => ({
@@ -42,12 +42,12 @@ class UsernameForm extends Component {
         cancelable
           .promise
           .then(res => {
-            if (res.status === 404) {
-              throw new Error("404")
-            }
             return res.json();
           })
           .then(data => {
+            if (data.error) {
+              throw new Error(data.error.message);
+            }
             this.props.onUserIdRetrieval(data)
           }).catch(({isCanceled, ...error}) => {
               if (isCanceled) {
