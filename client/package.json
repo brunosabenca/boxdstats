@@ -9,6 +9,7 @@
     "react-dom": "^16.8.1",
     "react-scripts": "2.1.4",
     "react-spinners": "^0.5.1",
+    "react-tooltip": "^3.9.2",
     "victory": "^31.2.0"
   },
   "scripts": {

@@ -140,9 +140,7 @@ class App extends Component {
                 <Container>
                   <section className="section" id="profile-header">
                     <div className="profile-summary">
-                      <div className="profile-avatar">
-                        <Avatar size="110" alt="User" name="User" imageUri={this.state.user.avatar} userId={this.state.user.id} />
-                      </div>
+                      <Avatar size="110" alt={`${this.state.user.name}'s avatar`} name={`${this.state.user.name}`} href={`https://letterboxd.com/${this.state.user.username}/`} imageUri={this.state.user.avatar} userId={this.state.user.id} />
                       <div className="profile-person-info">
                         <h1 className="title-1">{this.state.user.name ? this.state.user.name : this.state.user.username}</h1>
                         <ul className="person-metadata">
@@ -151,28 +149,28 @@ class App extends Component {
                       </div>
                       <ul className="stats">
                         <li>
-                          <p className="stat">
+                          <a href={`https://letterboxd.com/${this.state.user.username}/films/`} target="_blank" rel="noopener noreferrer">
                             <strong>{this.state.user.watches}</strong>
                             <span>Films</span>
-                          </p>
+                          </a>
                         </li>
                         <li>
-                          <p className="stat">
+                          <a href={`https://letterboxd.com/${this.state.user.username}/films/diary/for/2019/`} target="_blank" rel="noopener noreferrer">
                             <strong>{this.state.user.filmsInDiaryThisYear}</strong>
                             <span>This year</span>
-                          </p>
+                          </a>
                         </li>
                         <li>
-                          <p className="stat">
+                          <a href={`https://letterboxd.com/${this.state.user.username}/likes/films/`} target="_blank" rel="noopener noreferrer">
                             <strong>{this.state.user.filmLikes}</strong>
                             <span>Likes</span>
-                          </p>
+                          </a>
                         </li>
                         <li>
-                          <p className="stat">
+                          <a href={`https://letterboxd.com/${this.state.user.username}/films/ratings/`} target="_blank" rel="noopener noreferrer">
                             <strong>{this.state.user.ratings}</strong>
                             <span>Ratings</span>
-                          </p>
+                          </a>
                         </li>
                       </ul>
                     </div>
