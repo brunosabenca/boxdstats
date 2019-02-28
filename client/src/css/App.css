@@ -22,6 +22,10 @@ body {
   height: 50px;
 }
 
+.App-loading {
+  height: 10px;
+}
+
 .App-body {
   height: 100vh;
   color: #eff1f3;
@@ -296,11 +300,6 @@ a {
     /* -moz-binding: url(../js/ellipsis.xml#ellipsis); */
 }
 
-.loading {
-  height: 10px;
-  width: 100vw;
-  display: block;
-}
 
 ul.person-metadata {
     padding-inline-start: 1px;

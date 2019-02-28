@@ -114,13 +114,13 @@ class App extends Component {
 
         </Row>
 
-        <Row className="loading">
-        <BarLoader
-          widthUnit="%"
-          width={100}
-          color={'#24303c'}
-          loading={this.state.loading}
-        />
+        <Row className="App-loading">
+          <BarLoader
+            widthUnit="%"
+            width={100}
+            color={'#24303c'}
+            loading={this.state.loading}
+          />
         </Row>
 
         <Row className="App-body">
