@@ -41,12 +41,19 @@ class UsernameForm extends Component {
 
         cancelable
           .promise
-          .then(res => res.json())
+          .then(res => {
+            if (res.status === 404) {
+              throw new Error("404")
+            }
+            return res.json();
+          })
           .then(data => {
             this.props.onUserIdRetrieval(data)
           }).catch(({isCanceled, ...error}) => {
               if (isCanceled) {
                   console.log('Fetching user id was cancelled.')
+              } else {
+                this.props.onUserIdFailedRetrieval();
               }
           });
       }

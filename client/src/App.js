@@ -34,6 +34,7 @@ class App extends Component {
         following: null,
       },
       retrievedUser: false,
+      failedUserIdRetrieval: false,
       cancelable: [],
       loading: false
     }
@@ -42,8 +43,13 @@ class App extends Component {
   handleUserInvalidated = (userName) => {
     this.setState({retrievedUser: false, loading: true});
   }
+
   handleUserData = (userData) => {
     this.setState(prevState => ({user: {...prevState.user, username: userData.username, id: userData.id}}));
+  }
+
+  handleUserIdRetrievalFailure = () => {
+    this.setState(prevState => ({failedUserIdRetrieval: true, loading: false}));
   }
 
   async componentWillUnmount() {
@@ -96,14 +102,13 @@ class App extends Component {
           </Col>
 
         </Row>
-        <Row>
 
+        <Row className="loading">
         <BarLoader
           widthUnit="%"
           width={100}
           color={'#24303c'}
           loading={this.state.loading}
-          className="loading"
         />
         </Row>
 
@@ -112,7 +117,11 @@ class App extends Component {
             <Col xs={12}>
               <Row className="center">
                 <Col xs={9} md={6} lg={4}>
-                  <UsernameForm onUserInvalidated={this.handleUserInvalidated} onUserIdRetrieval={this.handleUserData} userName={this.state.user.username}/>
+                  <UsernameForm 
+                    onUserInvalidated={this.handleUserInvalidated}
+                    onUserIdRetrieval={this.handleUserData}
+                    onUserIdFailedRetrieval={this.handleUserIdRetrievalFailure}
+                    userName={this.state.user.username}/>
                 </Col>
               </Row>
               {
@@ -172,13 +181,28 @@ class App extends Component {
                       <MonthlyChart userId={this.state.user.id}/>
                     </Col>
                   </Row>
-
                 </Container>
                 :
-                <Row>
-                  <Col xs={3} className="loading">
-                  </Col>
-                </Row>
+                <Container>
+                  <Row>
+                    <Col xs={3} className="loading">
+                    </Col>
+                  </Row> 
+                </Container>
+              }
+
+              {
+                this.state.failedUserIdRetrieval && ! this.state.loading
+                ?
+                <Container>
+                  <Row>
+                    <Col xs={12} className="section">
+                      <h2 className="section-heading">No Result</h2>
+                      <p>Couldn't find a user with that username.</p>
+                    </Col>
+                  </Row>
+                </Container>
+                : ''
               }
 
             </Col>

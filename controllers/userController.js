@@ -7,7 +7,7 @@ exports.user_get = async function (req, res, next) {
     let userData = await fetchUserData(userId)
     res.json(userData);
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -15,11 +15,16 @@ exports.id_by_username_get = async function (req, res, next) {
   let userName = req.params['userName'];
   try {
     let userId = await fetchId(userName);
-    res.json({
-      'id': userId
-    });
+
+    if (userId !== 'invalid') {
+      res.json({
+        'id': userId
+      });
+    } else{
+      res.status(404).json({ error: { status: 404, message: "Couldn't find a user with that username."}});
+    }
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -27,10 +32,14 @@ exports.user_by_username_get = async function (req, res, next) {
   let userName = req.params['userName'];
   try {
     let userId = await fetchId(userName);
-    let userData = await fetchUserData(userId)
-    res.json(userData);
+    if (userId !== 'invalid') {
+      let userData = await fetchUserData(userId)
+      res.json(userData);
+    } else{
+      res.status(404).json({ error: { status: 404, message: "Couldn't find a user with that username."}});
+    }
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -56,7 +65,7 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
     }
     res.json(monthlyLogEntryCount);
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -90,7 +99,7 @@ exports.log_entries_highest_rated_get = async function (req, res, next) {
       }));
     res.json(arr);
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -121,7 +130,7 @@ exports.log_entries_get = async function (req, res, next) {
     let logEntries = await fetchLogEntries(params);
     res.json(logEntries);
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 }
 
@@ -152,13 +161,13 @@ async function fetchLogEntries(params, options) {
 }
 
 async function fetchId(userName) {
-  try {
-    let response = await axios(`http://letterboxd.com/${userName}`);
-    let userId = response.headers['x-letterboxd-identifier'];
-    return userId;
-  } catch (e) {
-    console.log(e);
-  }
+    return axios(`http://letterboxd.com/${userName}`).then((res) => {
+      return res.json();
+    }).then((data) => {
+      return data.headers['x-letterboxd-identifier'];
+    }).catch((e) => {
+      return 'invalid';
+    })
 }
 
 async function fetchUserData(userId) {
