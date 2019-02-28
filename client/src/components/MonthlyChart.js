@@ -60,10 +60,10 @@ class MonthlyChart extends Component {
     async fetchData() {
         this.setState({isFetching: true});
 
-        const counts2018 = this.fetchCounts(2018);
-        const counts2019 = this.fetchCounts(2019);
+        const counts2018 = await this.fetchCounts(2018);
+        const counts2019 = await this.fetchCounts(2019);
 
-        const promise =  Promise.all([counts2019, counts2018]);
+        const promise =  Promise.all([counts2018, counts2019]);
         const cancelable = makeCancelable(promise);
 
         this.setState(prevState => ({
@@ -142,7 +142,7 @@ class MonthlyChart extends Component {
 
                     height={100}
                     width={350}
-                    data={this.state.data['2018']}
+                    data={this.state.data['2019']}
                     animate={{
                         onExit: {
                             duration: 500
@@ -223,7 +223,7 @@ class MonthlyChart extends Component {
                     ]}
                 /> 
                 <VictoryBar
-                    data={this.state.data['2019']}
+                    data={this.state.data['2018']}
                     animate={{
                         onExit: {
                             duration: 500
