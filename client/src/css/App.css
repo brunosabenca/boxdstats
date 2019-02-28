@@ -27,7 +27,7 @@ body {
 }
 
 .App-body {
-  height: 100vh;
+  height: 100%;
   color: #eff1f3;
   padding: 1rem;
   justify-content: center;
