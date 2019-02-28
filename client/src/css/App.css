@@ -16,10 +16,13 @@ body {
   background: #14181c;
   font-weight: 900;
   padding: 0.8rem 0;
+  pointer-events: none;
+  user-select: none;
 }
 
 .App-logo {
   height: 50px;
+  pointer-events: none;
 }
 
 .App-loading {
