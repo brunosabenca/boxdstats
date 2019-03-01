@@ -220,7 +220,6 @@ class MonthlyChart extends Component {
                                 childName: "legend",
                                 target: "data",
                                 mutation: (props) => {
-                                    console.log(props);
                                     return {
                                         style: Object.assign({}, props.style, { fill: theme.colors.colorBright })
                                     }
@@ -230,7 +229,6 @@ class MonthlyChart extends Component {
                                 childName: "legend",
                                 target: "labels",
                                 mutation: (props) => {
-                                    console.log(props);
                                     return {
                                         style: Object.assign({}, props.style, { fill: theme.colors.colorBright })
                                     }
