@@ -140,7 +140,12 @@ class App extends Component {
                 <Container>
                   <section className="section" id="profile-header">
                     <div className="profile-summary">
-                      <Avatar size="110" alt={`${this.state.user.name}'s avatar`} name={`${this.state.user.name}`} href={`https://letterboxd.com/${this.state.user.username}/`} imageUri={this.state.user.avatar} userId={this.state.user.id} />
+                      <Avatar size="110"
+                        alt={`${this.state.user.name}'s avatar`}
+                        name={`${this.state.user.name ? this.state.user.name : this.state.user.username}`}
+                        href={`https://letterboxd.com/${this.state.user.username}/`}
+                        imageUri={this.state.user.avatar}
+                        userId={this.state.user.id} />
                       <div className="profile-person-info">
                         <h1 className="title-1">{this.state.user.name ? this.state.user.name : this.state.user.username}</h1>
                         <ul className="person-metadata">
