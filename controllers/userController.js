@@ -61,7 +61,7 @@ exports.log_entries_monthly_counts_get = async function (req, res, next) {
         year: year,
         month: month
       });
-      monthlyLogEntryCount[month] = logEntries.length;
+      monthlyLogEntryCount[month] = logEntries.length || 0;
     }
     res.json(monthlyLogEntryCount);
   } catch (e) {
@@ -160,11 +160,9 @@ async function fetchLogEntries(params, options) {
 
 }
 
-async function fetchId(userName) {
+function fetchId(userName) {
     return axios(`http://letterboxd.com/${userName}`).then((res) => {
-      return res.json();
-    }).then((data) => {
-      return data.headers['x-letterboxd-identifier'];
+      return res.headers['x-letterboxd-identifier'];
     }).catch((e) => {
       return 'invalid';
     })
