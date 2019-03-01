@@ -5,6 +5,7 @@ const Input = (props) => {
   <div className="form-group">
     <label htmlFor={props.name} className="form-label">{props.title}</label>
     <input
+      ref={input => input && input.focus()}
       className="field"
       id={props.name}
       name={props.name}
