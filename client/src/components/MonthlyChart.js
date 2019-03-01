@@ -119,8 +119,117 @@ class MonthlyChart extends Component {
                 height={100}
                 width={350}
                 horizontal={false}
+                events={[{
+                    childName: "legend",
+                    target: "data",
+                    eventHandlers: {
+                        onMouseOver: (event, props) => {
+                            return [{
+                                childName: `bars${props.datum.name}`,
+                                target: "labels",
+                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                mutation: () => ({active: true})
+                            }];
+                        },
+                        onMouseOut: (event, props) => {
+                            return [{
+                                childName: `bars${props.datum.name}`,
+                                target: "labels",
+                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                mutation: () => ({active: false})
+                            }];
+                        },
+                    }
+                },
+                {
+                    childName: "bars2018",
+                    target: "data",
+                    eventHandlers: {
+                        onClick: () => {
+                            return [{
+                                target: "data",
+                                mutation: (props) => {
+                                    window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1) + "/", '_blank');
+                                    console.log(props.index);
+                                }
+                            }];
+                        },
+                        onMouseOver: () => {
+                            return [
+                                {
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
+                                    }
+                                }
+                                }, {
+                                    target: "labels",
+                                    mutation: () => ({active: true})
+                                }
+                            ]
+                        },
+                        onMouseOut: () => {
+                            return [
+                                {
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { cursor: 'auto', fill: '#2c3440'})
+                                    }
+                                }
+                                }, {
+                                    target: "labels",
+                                    mutation: () => ({active: false})
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    childName: "bars2019",
+                    target: "data",
+                    eventHandlers: {
+                        onClick: () => {
+                            return [{
+                            target: "data",
+                            mutation: (props) => {
+                                window.open("https://letterboxd.com/heikai/films/diary/for/2019/" + (props.index + 1) + "/", '_blank');
+                            }
+                            }];
+                        },
+                        onMouseOver: () => {
+                            return [
+                                {
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
+                                    }
+                                }
+                                }, {
+                                target: "labels",
+                                    mutation: () => ({active: true})
+                                }
+                            ]
+                        },
+                        onMouseOut: () => {
+                            return [
+                                {
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { cursor: 'auto', fill: '#89a' })
+                                    }
+                                }
+                                }, {
+                                    target: "labels",
+                                    mutation: () => ({active: false})
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]}
             >
                 <VictoryLegend x={290} y={0}
+                    name="legend"
                     width={100}
                     orientation="horizontal"
                     style={{
@@ -139,7 +248,7 @@ class MonthlyChart extends Component {
                     ]}
                 />
                 <VictoryBar
-
+                    name="bars2019"
                     height={100}
                     width={350}
                     data={this.state.data['2019']}
@@ -162,14 +271,14 @@ class MonthlyChart extends Component {
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
-                        width={11}
-                        height={11}
-                        dx={4}
+                        width={10}
+                        height={9}
+                        dx={5}
                         dy={-8}
                         style={{
                             fill: '#2c3440',
                             padding: 1,
-                            fontSize: 6,
+                            fontSize: 5,
                         }}
                         flyoutStyle={{
                             stroke: "none",
@@ -177,52 +286,9 @@ class MonthlyChart extends Component {
                         }}
                         />
                     }
-                    events={[
-                        {
-                            target: "data",
-                            eventHandlers: {
-                                onClick: () => {
-                                    return [{
-                                    target: "data",
-                                    mutation: (props) => {
-                                        window.open("https://letterboxd.com/heikai/films/diary/for/2019/" + (props.index + 1) + "/", '_blank');
-                                        console.log(props.index);
-                                    }
-                                    }];
-                                },
-                                onMouseOver: () => {
-                                return [
-                                    {
-                                    mutation: (props) => {
-                                        return {
-                                            style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
-                                        }
-                                    }
-                                    }, {
-                                    target: "labels",
-                                    mutation: () => ({active: true})
-                                    }
-                                ]
-                                },
-                                onMouseOut: () => {
-                                return [
-                                    {
-                                    mutation: (props) => {
-                                        return {
-                                            style: Object.assign({}, props.style, { cursor: 'auto', fill: '#89a' })
-                                        }
-                                    }
-                                    }, {
-                                    target: "labels",
-                                    mutation: () => ({active: false})
-                                    }
-                                ]
-                                }
-                            }
-                        }
-                    ]}
                 /> 
                 <VictoryBar
+                    name="bars2018"
                     data={this.state.data['2018']}
                     animate={{
                         onExit: {
@@ -235,7 +301,7 @@ class MonthlyChart extends Component {
                         },
                         labels: {
                             fill: '#2c3440',
-                            fontSize: 6,
+                            fontSize: 5,
                         }
                     }}
                     alignment="end"
@@ -243,9 +309,9 @@ class MonthlyChart extends Component {
                     labelComponent={<VictoryTooltip 
                         cornerRadius={1}
                         pointerLength={3}
-                        width={11}
-                        height={11}
-                        dx={-4}
+                        width={10}
+                        height={9}
+                        dx={-5}
                         dy={-8}
                         style={{
                             fill: '#89a',
@@ -258,50 +324,6 @@ class MonthlyChart extends Component {
                         }}
                         />
                     }
-                    events={[
-                        {
-                            target: "data",
-                            eventHandlers: {
-                                onClick: () => {
-                                    return [{
-                                    target: "data",
-                                    mutation: (props) => {
-                                        window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1) + "/", '_blank');
-                                        console.log(props.index);
-                                    }
-                                    }];
-                                },
-                                onMouseOver: () => {
-                                return [
-                                    {
-                                    mutation: (props) => {
-                                        return {
-                                            style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
-                                        }
-                                    }
-                                    }, {
-                                    target: "labels",
-                                    mutation: () => ({active: true})
-                                    }
-                                ]
-                                },
-                                onMouseOut: () => {
-                                return [
-                                    {
-                                    mutation: (props) => {
-                                        return {
-                                            style: Object.assign({}, props.style, { cursor: 'auto', fill: '#2c3440'})
-                                        }
-                                    }
-                                    }, {
-                                    target: "labels",
-                                    mutation: () => ({active: false})
-                                    }
-                                ]
-                                }
-                            }
-                        }
-                    ]}
                 /> 
                 <VictoryAxis
                     tickFormat={ (t, i) => { return this.state.months[i]} }   
