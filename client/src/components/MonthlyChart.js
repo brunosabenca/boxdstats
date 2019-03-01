@@ -3,6 +3,14 @@ import { VictoryTheme, VictoryBar, VictoryAxis, VictoryChart, VictoryLegend, Vic
 import { BarLoader } from 'react-spinners';
 import {makeCancelable} from '../makeCancelable'
 
+class CustomTooltip extends React.Component {
+  render() {
+    return (
+        <VictoryTooltip {...this.props} renderInPortal={false}/>
+    );
+  }
+}
+
 class MonthlyChart extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +56,7 @@ class MonthlyChart extends Component {
         .then((res) => {
             return res.json();
         }).then((data) => {
-            const array = Object.keys(data).map((key, index) => ({"x": this.state.months[index], "y": data[key], "label": data[key]}));
+            const array = Object.keys(data).map((key, index) => ({ "x": this.state.months[index], "y": data[key], "label": data[key], "year": year }));
             return array;
         }).catch(({isCanceled, ...error}) => {
             if (isCanceled) {
@@ -109,6 +117,88 @@ class MonthlyChart extends Component {
                 padding: 2,
             },
         };
+        const theme = {
+            2018: {
+                bar: {
+                    normal: {
+                        data: {
+                            fill: '#2c3440',
+                            cursor: 'auto'
+                        },
+                        labels: {
+                            fill: '#89a', fontSize: 5,
+                        }
+                    },
+                    mouseover: {
+                        data: {
+                            fill: '#40bcf4',
+                            cursor: 'pointer'
+                        },
+                        labels: {
+                            fill: '#40bcf4', fontSize: 5,
+                        }
+                    },
+                },
+                tooltip: { 
+                    normal: {
+                        padding: 1, fontSize: 6, fill: '#2c3440'
+                    },
+                    mouseover: {
+                        padding: 1, fontSize: 6, fill: '#2c3440'
+                    }
+                },
+                flyout :{
+                    stroke: "none", fill: "#40bcf4"
+                },
+                colors: {
+                    colorA: '#2c3440',
+                    colorB: '#89a'
+                }
+            },
+            2019: {
+                bar: {
+                    normal: {
+                        data: {
+                            fill: '#89a',
+                            cursor: 'auto'
+                        },
+                        labels: {
+                            fill: '#2c3440', fontSize: 5,
+                        }
+                    },
+                    mouseover: {
+                        data: {
+                            fill: '#40bcf4',
+                            cursor: 'pointer'
+                        },
+                        labels: {
+                            fill: '#40bcf4', fontSize: 5,
+                        }
+                    }
+                },
+                tooltip: {
+                    normal: {
+                        padding: 1, fontSize: 6, fill: '#2c3440'
+                    },
+                    mouseover: {
+                        padding: 1, fontSize: 6, fill: '#2c3440'
+                    }
+                },
+                flyout: {
+                    stroke: "none", fill: "#40bcf4"
+                },
+                colors: {
+                    colorA: '#89a',
+                    colorB: '#2c3440'
+                }
+            },
+            colors: {
+                colorDark: '#2c3440',
+                colorLight: '#89a',
+                colorBright: "#40bcf4",
+            }
+        }
+
         return (
             this.state.isFetching ===  false ?
             <VictoryChart
@@ -119,47 +209,88 @@ class MonthlyChart extends Component {
                 height={100}
                 width={350}
                 horizontal={false}
-                events={[{
-                    childName: "legend",
-                    target: "data",
-                    eventHandlers: {
-                        onMouseOver: (event, props) => {
-                            return [{
-                                childName: `bars${props.datum.name}`,
-                                target: "labels",
-                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                                mutation: () => ({active: true})
-                            }];
-                        },
-                        onMouseOut: (event, props) => {
-                            return [{
-                                childName: `bars${props.datum.name}`,
-                                target: "labels",
-                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                                mutation: () => ({active: false})
-                            }];
-                        },
-                    }
-                },
+                events={[
                 {
                     childName: "legend",
                     target: "labels",
                     eventHandlers: {
                         onMouseOver: (event, props) => {
-                            return [{
+                            return [
+                            {
+                                childName: "legend",
+                                target: "data",
+                                mutation: (props) => {
+                                    console.log(props);
+                                    return {
+                                        style: Object.assign({}, props.style, { fill: theme.colors.colorBright })
+                                    }
+                                }
+                            },
+                            {
+                                childName: "legend",
+                                target: "labels",
+                                mutation: (props) => {
+                                    console.log(props);
+                                    return {
+                                        style: Object.assign({}, props.style, { fill: theme.colors.colorBright })
+                                    }
+                                }
+                            },
+                            {
                                 childName: `bars${props.datum.name}`,
                                 target: "labels",
-                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                eventKey: "all",
                                 mutation: () => ({active: true})
-                            }];
+                            },
+                            {
+                                childName: `bars${props.datum.name}`,
+                                target: "data",
+                                eventKey: "all",
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, theme[props.datum.year].bar.mouseover.data)
+                                    }
+                                }
+                            }
+                        ];
                         },
                         onMouseOut: (event, props) => {
-                            return [{
+                            return [
+                            {
+                                childName: "legend",
+                                target: "data",
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { fill: theme[Number.parseInt(props.datum.name)].colors.colorA })
+                                    }
+                                }
+                            },
+                            {
+                                childName: "legend",
+                                target: "labels",
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, { fill: theme.colors.colorLight })
+                                    }
+                                }
+                            },
+                            {
                                 childName: `bars${props.datum.name}`,
                                 target: "labels",
-                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                eventKey: "all",
                                 mutation: () => ({active: false})
-                            }];
+                            },
+                            {
+                                childName: `bars${props.datum.name}`,
+                                target: "data",
+                                eventKey: "all",
+                                mutation: (props) => {
+                                    return {
+                                        style: Object.assign({}, props.style, theme[props.datum.year].bar.normal.data)
+                                    }
+                                }
+                            }
+                        ];
                         },
                     }
                 },
@@ -172,16 +303,15 @@ class MonthlyChart extends Component {
                                 target: "data",
                                 mutation: (props) => {
                                     window.open("https://letterboxd.com/heikai/films/diary/for/2018/" + (props.index + 1) + "/", '_blank');
-                                    console.log(props.index);
                                 }
                             }];
                         },
-                        onMouseOver: () => {
+                        onMouseOver: (event, props) => {
                             return [
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
+                                        style: Object.assign({}, props.style, theme[2018].bar.mouseover.data)
                                     }
                                 }
                                 }, {
@@ -195,7 +325,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, { cursor: 'auto', fill: '#2c3440'})
+                                        style: Object.assign({}, props.style, theme[2018].bar.normal.data)
                                     }
                                 }
                                 }, {
@@ -208,7 +338,6 @@ class MonthlyChart extends Component {
                 },
                 {
                     childName: "bars2019",
-                    target: "data",
                     eventHandlers: {
                         onClick: () => {
                             return [{
@@ -223,7 +352,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, { cursor: 'pointer', fill: '#40bcf4'})
+                                        style: Object.assign({}, props.style, theme[2019].bar.mouseover.data)
                                     }
                                 }
                                 }, {
@@ -237,7 +366,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, { cursor: 'auto', fill: '#89a' })
+                                        style: Object.assign({}, props.style, theme[2019].bar.normal.data)
                                     }
                                 }
                                 }, {
@@ -279,33 +408,18 @@ class MonthlyChart extends Component {
                             duration: 500
                         }
                     }}
-                    style={{
-                        data: {
-                            fill: '#89a'
-                        },
-                        labels: {
-                            fill: '#89a',
-                            fontSize: 6,
-                        }
-                    }}
+                    style={theme[2019].bar.normal}
                     alignment="start"
                     barWidth={10}
-                    labelComponent={<VictoryTooltip 
+                    labelComponent={<CustomTooltip 
                         cornerRadius={1}
                         pointerLength={3}
                         width={10}
                         height={9}
                         dx={5}
                         dy={-8}
-                        style={{
-                            fill: '#2c3440',
-                            padding: 1,
-                            fontSize: 5,
-                        }}
-                        flyoutStyle={{
-                            stroke: "none",
-                            fill: "#89a"
-                        }}
+                        style={theme[2019].tooltip.normal}
+                        flyoutStyle={theme[2019].flyout}
                         />
                     }
                 /> 
@@ -317,33 +431,18 @@ class MonthlyChart extends Component {
                             duration: 500
                         }
                     }}
-                    style={{
-                        data: {
-                            fill: '#2c3440',
-                        },
-                        labels: {
-                            fill: '#2c3440',
-                            fontSize: 5,
-                        }
-                    }}
+                    style={theme[2018].bar.normal}
                     alignment="end"
                     barWidth={10}
-                    labelComponent={<VictoryTooltip 
+                    labelComponent={<CustomTooltip 
                         cornerRadius={1}
                         pointerLength={3}
                         width={10}
                         height={9}
                         dx={-5}
                         dy={-8}
-                        style={{
-                            fill: '#89a',
-                            padding: 1,
-                            fontSize: 6,
-                        }}
-                        flyoutStyle={{
-                            stroke: "none",
-                            fill: "#2c3440"
-                        }}
+                        style={theme[2018].tooltip.normal}
+                        flyoutStyle={theme[2018].flyout}
                         />
                     }
                 /> 
