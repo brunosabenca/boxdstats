@@ -15,18 +15,62 @@ a:hover, a:visited, a:link, a:active
 
 .App-header {
   text-align: center;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.5em;
   color: #eff1f3;
   background: #14181c;
   font-weight: 900;
   padding: 0.8rem 0;
-  pointer-events: none;
   user-select: none;
 }
 
+.App-logo-wrapper {
+  width: 120px;
+  height: 80px;
+  display: block;
+  text-align: center;
+  position: relative;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+}
+
+
+.App-logo-wrapper:after, .App-logo-wrapper a, .App-logo-wrapper img {
+  display: block;
+  overflow: hidden;
+}
+
+.App-logo-wrapper a {
+  z-index: 1;
+}
+
+.App-logo-wrapper:before {
+  content: "";
+  transition: all .2s;
+}
+
+.App-logo-wrapper:hover:before {
+  text-shadow:5px 5px 10px #fff, 1px 1px 10px #ccc;
+}
+
+.App-logo-wrapper:after, .App-logo-wrapper a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-indent: 110%;
+}
+
+
 .App-logo {
   height: 50px;
+  width: 50px;
   pointer-events: none;
 }
 

@@ -18,6 +18,12 @@ class UsernameForm extends Component {
       this.handleClearForm = this.handleClearForm.bind(this);
     }
   
+    componentDidUpdate(prevProps) {
+      if (prevProps.userName !== this.props.userName) {
+        this.setState({ userName: '', submittedUserName: '' });
+      }
+    }
+  
     handleFormSubmit(e) {
       e.preventDefault();
       window.scrollTo(0,0);
@@ -61,9 +67,7 @@ class UsernameForm extends Component {
 
     handleClearForm(e) {
       e.preventDefault();
-      this.setState({ 
-        userName: '',
-      });
+      this.setState({ userName: '' });
     }
 
     handleInput(e) {

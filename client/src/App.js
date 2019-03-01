@@ -98,20 +98,26 @@ class App extends Component {
     }
   }
 
+  resetState(event) {
+    event.preventDefault();
+    this.setState({ 
+      user : {},
+      retrievedUser: false,
+      failedUserIdRetrieval: false,
+      cancelable: [],
+      loading: false
+    });
+  }
+
   render() {
     return (
       <Container fluid={true} className="App">
 
         <Row className="App-header">
-
-          <Col xs={12}>
-            <Logo className="App-logo"/>
-          </Col>
-
-          <Col xs={12}>
-            BoxdStats
-          </Col>
-
+          <span className="App-logo-wrapper">
+              <Logo className="App-logo"/>BoxdStats
+              <a href="/" onClick={ this.resetState.bind(this) }> </a>
+          </span>
         </Row>
 
         <Row className="App-loading">
@@ -129,6 +135,7 @@ class App extends Component {
               <Row className="center">
                 <Col xs={9} md={6} lg={4}>
                   <UsernameForm 
+                    userName={this.state.user.username}
                     onUserInvalidated={this.handleUserInvalidated}
                     onUserIdRetrieval={this.handleUserData}
                     onUserIdFailedRetrieval={this.handleUserIdRetrievalFailure}/>
