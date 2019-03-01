@@ -142,6 +142,28 @@ class MonthlyChart extends Component {
                     }
                 },
                 {
+                    childName: "legend",
+                    target: "labels",
+                    eventHandlers: {
+                        onMouseOver: (event, props) => {
+                            return [{
+                                childName: `bars${props.datum.name}`,
+                                target: "labels",
+                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                mutation: () => ({active: true})
+                            }];
+                        },
+                        onMouseOut: (event, props) => {
+                            return [{
+                                childName: `bars${props.datum.name}`,
+                                target: "labels",
+                                eventKey: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                mutation: () => ({active: false})
+                            }];
+                        },
+                    }
+                },
+                {
                     childName: "bars2018",
                     target: "data",
                     eventHandlers: {
