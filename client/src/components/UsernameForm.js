@@ -20,7 +20,7 @@ class UsernameForm extends Component {
   
     componentDidUpdate(prevProps) {
       if (prevProps.userName !== this.props.userName) {
-        this.setState({ userName: '', submittedUserName: '' });
+        this.setState({ userName: '', submittedUserName: this.props.userName });
       }
     }
   
