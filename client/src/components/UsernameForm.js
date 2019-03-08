@@ -28,7 +28,7 @@ class UsernameForm extends Component {
       e.preventDefault();
       window.scrollTo(0,0);
 
-      if (this.state.userName !== this.state.submittedUserName) {
+      if (this.state.userName.toLowerCase() !== this.state.submittedUserName.toLowerCase()) {
         this.setState({submittedUserName: this.state.userName});
 
         if (this.state.cancelable) {
@@ -38,7 +38,7 @@ class UsernameForm extends Component {
 
         this.props.onUserInvalidated();
 
-        const promise = fetch('/api/v1/user/by-username/' + this.state.userName  + '/id');
+        const promise = fetch('/api/v1/user/by-username/' + this.state.userName.toLowerCase()  + '/id');
         const cancelable = makeCancelable(promise);
 
         this.setState(prevState => ({
