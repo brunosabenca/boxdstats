@@ -20,6 +20,12 @@ class UsernameForm extends Component {
   
     componentDidUpdate(prevProps) {
       if (prevProps.userName !== this.props.userName) {
+
+        if (this.state.cancelable) {
+            this.state.cancelable.forEach((item) => item.cancel())
+        }
+        this.setState({cancelable: []});
+
         if (this.props.userName) {
           this.setState({ userName: '', submittedUserName: this.props.userName });
         } else {
