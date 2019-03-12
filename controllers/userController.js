@@ -94,6 +94,7 @@ exports.log_entries_highest_rated_get = async function (req, res, next) {
         "name": logEntries[key].film.name,
         "link": logEntries[key].film.links[0].url,
         "rating": logEntries[key].rating,
+        "year": logEntries[key].film.releaseYear,
         "like": logEntries[key].like,
         "poster": logEntries[key].film.poster.sizes[3],
       }));

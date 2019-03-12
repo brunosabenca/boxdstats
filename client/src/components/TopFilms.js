@@ -76,6 +76,7 @@ class TopFilms extends Component {
                 height={film.poster.height}
                 width={film.poster.width}
                 rating={film.rating}
+                year={film.year}
                 href={film.link}
                 className="poster"
                 key={film.link}

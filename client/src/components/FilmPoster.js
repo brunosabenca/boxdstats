@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ReactTooltip from 'react-tooltip'
 
 function getStarRating(rating) {
     var stars = '';
@@ -23,7 +23,7 @@ function getStarRating(rating) {
 const FilmPoster = (props) => {
     return(
         <div className="poster-container">
-            <div className="poster">
+            <div className="poster" data-tip={`${props.name} (${props.year})`}>
                 <img 
                     className="image"
                     alt={props.name}
@@ -39,6 +39,7 @@ const FilmPoster = (props) => {
                     <meta itemProp="ratingValue" content={props.rating}/><meta itemProp="worstRating" content="1"/><meta itemProp="bestRating" content="10"/>
                 </span>
             </p>
+            <ReactTooltip place="top" effect="solid" type="light"/>
         </div>
     )
 }
