@@ -70,7 +70,7 @@ class App extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (this.state.user.id !== prevState.user.id) {
+    if (this.state.user.id !== null && this.state.user.id !== prevState.user.id) {
         if (this.state.cancelable) {
             this.state.cancelable.forEach((item) => item.cancel())
         }
@@ -101,7 +101,10 @@ class App extends Component {
   resetState(event) {
     event.preventDefault();
     this.setState({ 
-      user : {},
+      user : {
+        id: null,
+        username: null,
+      },
       retrievedUser: false,
       failedUserIdRetrieval: false,
       cancelable: [],
