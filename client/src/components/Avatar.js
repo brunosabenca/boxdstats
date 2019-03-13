@@ -11,7 +11,7 @@ class Avatar extends Component {
                 { this.props.imageUri ? <img src={this.props.imageUri} alt={this.props.alt}/> : <img src={placeholderAvatar} alt={this.props.alt}/> }
 
                 <a href={this.props.href}
-                    data-tip={`Visit ${this.props.name}'s Letterboxd Profile`}
+                    data-tip={this.props.tooltip}
                     target="_blank"
                     rel="noopener noreferrer">
                 </a> 
