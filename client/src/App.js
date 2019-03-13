@@ -258,7 +258,7 @@ class App extends Component {
                   <Row>
                     <Col xs={12} className="section">
                       <h2 className="section-heading">Monthly Chart</h2>
-                      <MonthlyChart userId={this.state.user.id}/>
+                      <MonthlyChart userId={this.state.user.id} userName={this.state.user.username}/>
                     </Col>
                   </Row>
                 </Container>
