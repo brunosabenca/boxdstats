@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { BarLoader } from 'react-spinners';
 import UsernameForm from './components/UsernameForm';
 import Avatar from './components/Avatar';
+import ExampleUserAvatar from './components/ExampleUserAvatar';
 import MonthlyChart from './components/MonthlyChart';
 import TopFilms from './components/TopFilms';
 
@@ -19,20 +20,76 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user : {
-        id: null,
-        username: null,
-        name: null,
-        avatar: null,
-        bio: null,
-        filmsInDiaryThisYear: null,
-        filmLikes: null,
-        ratings: null,
-        watches: null,
-        watchlist: null,
-        followers: null,
-        following: null,
-      },
+        user: {
+          id: null,
+          username: null,
+          name: null,
+          avatar: null,
+          bio: null,
+          filmsInDiaryThisYear: null,
+          filmLikes: null,
+          ratings: null,
+          watches: null,
+          watchlist: null,
+          followers: null,
+          following: null,
+        },
+        exampleUsers: [{
+            avatar: "https://secure.gravatar.com/avatar/b24b9e12f9e2e537573c7bd293ee042c?rating=PG&size=144&border=&default=https%3A%2F%2Fletterboxd.com%2Fstatic%2Fimg%2Favatar144.4850a154.png",
+            id: "4ueV",
+            name: "Bruno",
+            username: "Heikai",
+            bio: "",
+            filmLikes: 473,
+            filmsInDiaryThisYear: 11,
+            followers: 10,
+            following: 6,
+            location: "Portugal",
+            ratings: 567,
+            watches: 929,
+            watchlist: 431,
+          },
+          {
+            avatar: "https://a.ltrbxd.com/resized/avatar/twitter/7/3/7/2/8/shard/http___pbs.twimg.com_profile_images_1045449894490566656_VfdzLXRO-0-144-0-144-crop.jpg?k=0e00bb1897",
+            bio: "<p>ratings are overrated.</p>",
+            filmLikes: 89,
+            filmsInDiaryThisYear: 16,
+            followers: 12,
+            following: 10,
+            id: "35NJ",
+            name: "António",
+            ratings: 1001,
+            username: "skaddoe",
+            watches: 1152,
+            watchlist: 139,
+          },
+          {
+            avatar: "https://a.ltrbxd.com/resized/avatar/twitter/4/2/9/8/5/7/shard/http___pbs.twimg.com_profile_images_662327963333955584_lIPiLqPo-0-144-0-144-crop.jpg?k=8fc287ca90",
+            bio: "",
+            filmLikes: 0,
+            filmsInDiaryThisYear: 7,
+            followers: 5,
+            following: 5,
+            id: "i2fT",
+            ratings: 842,
+            username: "L3v3L",
+            watches: 1002,
+            watchlist: 329,
+          },
+          {
+            avatar: "https://secure.gravatar.com/avatar/1752031f1aec32a4687ebd4e82dc5c5c?rating=PG&size=144&border=&default=https%3A%2F%2Fletterboxd.com%2Fstatic%2Fimg%2Favatar144.4850a154.png",
+            bio: "",
+            filmLikes: 212,
+            filmsInDiaryThisYear: 3,
+            followers: 3,
+            following: 3,
+            id: "9dbF",
+            ratings: 0,
+            username: "Unzaree",
+            watches: 338,
+            watchlist: 412,
+          }
+        ],
       retrievedUser: false,
       failedUserIdRetrieval: false,
       cancelable: [],
@@ -208,7 +265,18 @@ class App extends Component {
                 :
                 <Container>
                   <Row>
-                    <Col xs={3} className="loading">
+                    <Col xs={12} className="section">
+                      <h2 className="section-heading">Example Profiles</h2>
+                      <Row className="poster-list">
+                        <ExampleUserAvatar size="110" user={this.state.exampleUsers[0]}
+                                onUserIdRetrieval={this.handleUserData} />
+                        <ExampleUserAvatar size="110" user={this.state.exampleUsers[1]}
+                                onUserIdRetrieval={this.handleUserData} />
+                        <ExampleUserAvatar size="110" user={this.state.exampleUsers[2]}
+                                onUserIdRetrieval={this.handleUserData} />
+                        <ExampleUserAvatar size="110" user={this.state.exampleUsers[3]}
+                                onUserIdRetrieval={this.handleUserData} />
+                      </Row>
                     </Col>
                   </Row> 
                 </Container>
