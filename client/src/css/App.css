@@ -91,7 +91,7 @@ a:hover, a:visited, a:link, a:active
 }
 
 .App-body-wrapper {
-  width: 50vw;
+  width: 940px;
 }
 
 .center {
@@ -110,6 +110,7 @@ a:hover, a:visited, a:link, a:active
 .poster-container {
   display: block;
   width: 162px;
+  margin: 10px;
 }
 
 .poster-list {
