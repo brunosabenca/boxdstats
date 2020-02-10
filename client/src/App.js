@@ -228,7 +228,7 @@ class App extends Component {
                           </a>
                         </li>
                         <li>
-                          <a href={`https://letterboxd.com/${this.state.user.username}/films/diary/for/2019/`} target="_blank" rel="noopener noreferrer">
+                          <a href={`https://letterboxd.com/${this.state.user.username}/films/diary/for/2020/`} target="_blank" rel="noopener noreferrer">
                             <strong>{this.state.user.filmsInDiaryThisYear}</strong>
                             <span>This year</span>
                           </a>
@@ -252,7 +252,7 @@ class App extends Component {
                   <Row>
                     <Col xs={12} className="section">
                       <h2 className="section-heading">Highest Rated Films</h2>
-                      <TopFilms userId={this.state.user.id} year={2019}/>
+                      <TopFilms userId={this.state.user.id} year={2020}/>
                     </Col>
                   </Row>
 
