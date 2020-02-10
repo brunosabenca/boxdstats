@@ -68,10 +68,10 @@ class MonthlyChart extends Component {
     async fetchData() {
         this.setState({isFetching: true});
 
-        const counts2018 = await this.fetchCounts(2018);
         const counts2019 = await this.fetchCounts(2019);
+        const counts2020 = await this.fetchCounts(2020);
 
-        const promise =  Promise.all([counts2018, counts2019]);
+        const promise =  Promise.all([counts2019, counts2020]);
         const cancelable = makeCancelable(promise);
 
         this.setState(prevState => ({
@@ -84,7 +84,7 @@ class MonthlyChart extends Component {
             // Calculate max value of both arrays
             const max = Math.max(...data[0].concat(data[1]).map(function(o) { return o.y; }))
 
-            this.setState({data: {'2018': data[0], '2019': data[1]}, max: max, isFetching: false, cancelable: []});
+            this.setState({data: {'2019': data[0], '2020': data[1]}, max: max, isFetching: false, cancelable: []});
         }).catch(({isCanceled, ...error}) => {
             if (isCanceled) {
                 console.log('Fetching monthly chart data was cancelled.')
@@ -118,7 +118,7 @@ class MonthlyChart extends Component {
             },
         };
         const theme = {
-            2018: {
+            2019: {
                 bar: {
                     normal: {
                         data: {
@@ -155,7 +155,7 @@ class MonthlyChart extends Component {
                     colorB: '#89a'
                 }
             },
-            2019: {
+            2020: {
                 bar: {
                     normal: {
                         data: {
@@ -293,14 +293,14 @@ class MonthlyChart extends Component {
                     }
                 },
                 {
-                    childName: "bars2018",
+                    childName: "bars2019",
                     target: "data",
                     eventHandlers: {
                         onClick: () => {
                             return [{
                                 target: "data",
                                 mutation: (props) => {
-                                    window.open(`https://letterboxd.com/${this.props.userName}/films/diary/for/2018/${props.index+1}/`, '_blank');
+                                    window.open(`https://letterboxd.com/${this.props.userName}/films/diary/for/2019/${props.index+1}/`, '_blank');
                                 }
                             }];
                         },
@@ -309,7 +309,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, theme[2018].bar.mouseover.data)
+                                        style: Object.assign({}, props.style, theme[2019].bar.mouseover.data)
                                     }
                                 }
                                 }, {
@@ -323,7 +323,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, theme[2018].bar.normal.data)
+                                        style: Object.assign({}, props.style, theme[2019].bar.normal.data)
                                     }
                                 }
                                 }, {
@@ -335,13 +335,13 @@ class MonthlyChart extends Component {
                     }
                 },
                 {
-                    childName: "bars2019",
+                    childName: "bars2020",
                     eventHandlers: {
                         onClick: () => {
                             return [{
                             target: "data",
                             mutation: (props) => {
-                                window.open(`https://letterboxd.com/${this.props.userName}/films/diary/for/2018/${props.index+1}/`, '_blank');
+                                window.open(`https://letterboxd.com/${this.props.userName}/films/diary/for/2020/${props.index+1}/`, '_blank');
                             }
                             }];
                         },
@@ -350,7 +350,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, theme[2019].bar.mouseover.data)
+                                        style: Object.assign({}, props.style, theme[2020].bar.mouseover.data)
                                     }
                                 }
                                 }, {
@@ -364,7 +364,7 @@ class MonthlyChart extends Component {
                                 {
                                 mutation: (props) => {
                                     return {
-                                        style: Object.assign({}, props.style, theme[2019].bar.normal.data)
+                                        style: Object.assign({}, props.style, theme[2020].bar.normal.data)
                                     }
                                 }
                                 }, {
@@ -392,8 +392,8 @@ class MonthlyChart extends Component {
                     }}
 
                     data={[
-                        { name: "2018", symbol: { fill: "#2c3440"} },
-                        { name: "2019", symbol: { fill: "#89a" } },
+                        { name: "2019", symbol: { fill: "#2c3440"} },
+                        { name: "2020", symbol: { fill: "#89a" } },
                     ]}
                 />
                 <VictoryBar
@@ -422,14 +422,14 @@ class MonthlyChart extends Component {
                     }
                 /> 
                 <VictoryBar
-                    name="bars2018"
-                    data={this.state.data['2018']}
+                    name="bars2020"
+                    data={this.state.data['2020']}
                     animate={{
                         onExit: {
                             duration: 500
                         }
                     }}
-                    style={theme[2018].bar.normal}
+                    style={theme[2020].bar.normal}
                     alignment="end"
                     barWidth={10}
                     labelComponent={<CustomTooltip 
@@ -439,8 +439,8 @@ class MonthlyChart extends Component {
                         height={9}
                         dx={-5}
                         dy={-8}
-                        style={theme[2018].tooltip.normal}
-                        flyoutStyle={theme[2018].flyout}
+                        style={theme[2020].tooltip.normal}
+                        flyoutStyle={theme[2020].flyout}
                         />
                     }
                 /> 
