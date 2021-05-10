@@ -23,7 +23,7 @@
     "flatted": "^2.0.0",
     "morgan": "~1.9.0",
     "node-fetch": "^2.6.1",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "require-directory": "^2.1.1",
     "url-search-params-polyfill": "^5.0.0",
     "uuid": "^3.3.2",
